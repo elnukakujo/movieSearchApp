@@ -1,2 +1,5 @@
 ImdbApiDownload/bin
 ImdbApiDownload/obj
+
+backend/obj
+backend/bin

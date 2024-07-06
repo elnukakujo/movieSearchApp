@@ -14,7 +14,7 @@ namespace TsvToJsonConverter
         {
             const string url = "https://datasets.imdbws.com/title.basics.tsv.gz";
             const int maxRows = 5;
-            const string outputFileName = "title.basics.json";
+            const string outputFileName = "../frontend/src/assets/data/title.basics.json";
 
             using HttpClient client = new HttpClient();
             using HttpResponseMessage response = await client.GetAsync(url, HttpCompletionOption.ResponseHeadersRead);
