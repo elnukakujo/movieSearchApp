@@ -1,1 +1,3 @@
 @ImdbApi_HostAddress = http://localhost:5156
+
+GET http://localhost:5156/api/IMDbData/download
