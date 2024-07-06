@@ -13,7 +13,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("ImdbApiDownload")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+60db686a1dfa9e18410727c30b0f62c7b36d387d")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+16a25ff362098839624ff4a1b6af4dd6dacaaa3b")]
 [assembly: System.Reflection.AssemblyProductAttribute("ImdbApiDownload")]
 [assembly: System.Reflection.AssemblyTitleAttribute("ImdbApiDownload")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]
