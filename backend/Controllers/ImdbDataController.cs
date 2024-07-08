@@ -1,5 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
-
+using Microsoft.AspNetCore.Mvc.ModelBinding;
 
 namespace backend.Controllers
 {
@@ -14,11 +14,33 @@ namespace backend.Controllers
             _tmdbService = tmdbService;
         }
 
-        [HttpGet("trending")]
-        public async Task<IActionResult> GetTrendingMovies()
+        [HttpGet("upcoming")]
+        public async Task<IActionResult> GetUpcomingMovies([FromQuery] string Language, [FromQuery] string Region)
         {
-            var trendingMovies = await _tmdbService.GetTrendingMoviesAsync();
+            var trendingMovies = await _tmdbService.GetUpcomingMoviesAsync(Language, Region);
             return Ok(trendingMovies);
+        }
+
+        [HttpGet("trending")]
+        public async Task<IActionResult> GetTrendingMovies([FromQuery] string TimeInterval, [FromQuery] string Language)
+        {
+            var trendingMovies = await _tmdbService.GetTrendingMoviesAsync(TimeInterval, Language);
+            return Ok(trendingMovies);
+        }
+        [HttpGet("top_rated")]
+        public async Task<IActionResult> GetTopRatedMovies([FromQuery] string Language)
+        {
+            try
+            {
+                var topRatedMovies = await _tmdbService.GetTopRatedMoviesAsync(Language);
+                return Ok(topRatedMovies);
+            }
+            catch (Exception ex)
+            {
+                // Log the exception for debugging
+                Console.WriteLine($"Error fetching top rated movies: {ex.Message}");
+                return StatusCode(500, "Internal server error");
+            }
         }
     }
 }
