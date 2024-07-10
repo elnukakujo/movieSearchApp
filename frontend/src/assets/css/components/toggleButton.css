@@ -1,0 +1,23 @@
+.toggle-button-container{
+    display: flex;
+    justify-content: space-between;
+    width: 100%;
+}
+.toggle-button{
+    background-color: #f1f1f1;
+    border: none;
+    color: black;
+    padding: 10px 20px;
+    text-align: center;
+    text-decoration: none;
+    font-size: 16px;
+    margin: 4px 2px;
+    cursor: pointer;
+    border-radius: 16px;
+    width: 100%;
+    transition: 0.3s;
+}
+
+.selected{
+    background-color: #fa4949;
+}

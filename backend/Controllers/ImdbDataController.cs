@@ -7,7 +7,7 @@ namespace backend.Controllers
     [Route("api/[controller]")]
     public class TmdbDataController: ControllerBase
     {
-         private readonly TmdbService _tmdbService;
+        private readonly TmdbService _tmdbService;
 
         public TmdbDataController(TmdbService tmdbService)
         {

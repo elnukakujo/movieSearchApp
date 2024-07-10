@@ -1,19 +1,23 @@
-import React, { useEffect } from 'react';
-import '../assets/css/components/trending.css';
+import React, { useState, useEffect, useRef } from 'react';
+import '../assets/css/components/dragMenu.css';
 import { Link } from 'react-router-dom';
 
-export default function DragMenu({url, title, id, queryParams}) {
-    const [movies, setMovies] = React.useState([]);
-    const [isDragging, setIsDragging] = React.useState(false);
-    const [startX, setStartX] = React.useState(0);
-    const [scrollLeft, setScrollLeft] = React.useState(0);
-    const moviesRef = React.useRef(null);
+import ToggleButton from './toggleButton';
+
+export default function DragMenu({url, title, id, queryParams, toggleButton}) {
+    const [movies, setMovies] = useState([]);
+    const [isDragging, setIsDragging] = useState(false);
+    const [startX, setStartX] = useState(0);
+    const [scrollLeft, setScrollLeft] = useState(0);
+    const [selectedMode, setSelectedMode] = useState('day');
+    const moviesRef = useRef(null);
 
     const fetchMovies = async () => {
         let fullUrl = new URL(url);
-        if(queryParams){
-            fullUrl += `?${queryParams}`;
-        }
+        fullUrl.search = new URLSearchParams(queryParams).toString();
+        if (toggleButton) {
+            fullUrl.search += `&TimeInterval=${selectedMode}`;
+          }
         try {
             const response = await fetch(fullUrl);
             if (!response.ok) {
@@ -28,13 +32,29 @@ export default function DragMenu({url, title, id, queryParams}) {
     };
 
     useEffect(() => {
-        fetchMovies();
+        if(toggleButton){
+            fetchMovies();
         
-        const interval = setInterval(() => {
-            fetchMovies(); // Fetch data every 5 seconds
-        }, 5000);
+        
+            const interval = setInterval(() => {
+                fetchMovies(); // Fetch data every 5 seconds
+            }, 5000);
 
-        return () => clearInterval(interval);
+            return () => clearInterval(interval);
+        }
+    }, [selectedMode]);
+
+    useEffect(() => {
+        if(!toggleButton){
+            fetchMovies();
+        
+        
+            const interval = setInterval(() => {
+                fetchMovies(); // Fetch data every 5 seconds
+            }, 5000);
+
+            return () => clearInterval(interval);
+        }
     }, []);
 
     const handleMouseDown = (event) => {
@@ -58,10 +78,22 @@ export default function DragMenu({url, title, id, queryParams}) {
         setIsDragging(false);
     };
 
+    const handleModeChange=(mode)=>{
+        const scrollPosition = moviesRef.current.scrollLeft;
+        setSelectedMode(mode);
+        setTimeout(() => {
+            moviesRef.current.scrollLeft = scrollPosition;
+          }, 0);
+    }
+
     return (
         <div className="section" id={id}>
             <div className="content">
                 <h2>{title}</h2>
+                {toggleButton && (
+                    <ToggleButton 
+                        mode={selectedMode}
+                        onModeChange={handleModeChange} />)}
                 <div
                     ref={moviesRef}
                     className={`movies ${isDragging ? 'dragging' : ''}`}

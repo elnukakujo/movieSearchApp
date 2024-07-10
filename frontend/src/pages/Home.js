@@ -14,7 +14,8 @@ export default function Home() {
             url="http://127.0.0.1:5252/api/TmdbData/trending"
             title="Trending Now"
             id="trending"
-            queryParams='TimeInterval=week&Language=en'
+            queryParams='Language=en'
+            toggleButton={true}
             />
             <DragMenu
             url="http://127.0.0.1:5252/api/TmdbData/top_rated"
