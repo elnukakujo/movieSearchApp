@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate, useParams, useLocation } from 'react-router-dom';
 import '../assets/css/pages/details.css'
+import DragMenu from '../components/DragMenu';
 
 export default function Details() {
     const { media_type, id } = useParams(); // Get movie_id from route parameter
@@ -28,12 +29,12 @@ export default function Details() {
         fetchMovies();
         const interval = setInterval(fetchMovies, 5000);
         return () => clearInterval(interval);
-    }, []);
+    }, [media_type, id, language]);
 
     return (
         <div className='section' id='details'>
           <div className='content'>
-            <div className='img-container'>
+            <div className='bg-container'>
               <img
                 src={element.backdrop_path}
                 alt={"Background image of "+element.original_title||element.original_name}
@@ -59,6 +60,11 @@ export default function Details() {
               ))}
             </ul>
             <a href={element.homepage} target='_blank'>See the home website</a>
+            <DragMenu
+              url={'http://127.0.0.1:5252/api/TmdbData/recommendation'}
+              title="Recommendations"
+              queryParams={`MediaType=${media_type}&id=${id}&Language=${language}`}
+            />
           </div>
         </div>
     );

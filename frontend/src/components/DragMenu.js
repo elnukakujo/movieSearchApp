@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import ToggleButton from './ToggleButton'; // Import ToggleButton component
-import '../assets/css/components/dragMenu.css';
+import '../assets/css/components/dragMenu.css'; // Ensure correct path to CSS file
 
 export default function DragMenu({ url, title, queryParams, toggleButton = [] }) {
   const [movies, setMovies] = useState([]);
@@ -24,7 +24,9 @@ export default function DragMenu({ url, title, queryParams, toggleButton = [] })
       }
       const data = await response.json();
       setMovies(data);
-      moviesRef.current.scrollLeft = 0; // Reset scroll position to 0 on fetch
+      if (moviesRef.current) {
+        moviesRef.current.scrollLeft = 0; // Reset scroll position to 0 on fetch if moviesRef is available
+      }
     } catch (error) {
       console.error('Error fetching movies:', error);
       setMovies([]); // Set movies to empty array in case of error
@@ -33,19 +35,23 @@ export default function DragMenu({ url, title, queryParams, toggleButton = [] })
 
   useEffect(() => {
     fetchMovies(selectedMode);
-  }, [url, queryParams]);
+  }, [url, queryParams]); // Fetch movies when URL or queryParams change
 
   const handleMouseDown = (event) => {
     setIsDragging(true);
-    setStartX(event.clientX - moviesRef.current.offsetLeft);
-    setScrollLeft(moviesRef.current.scrollLeft);
+    if (moviesRef.current) {
+      setStartX(event.clientX - moviesRef.current.offsetLeft);
+      setScrollLeft(moviesRef.current.scrollLeft);
+    }
   };
 
   const handleMouseMove = (event) => {
     if (!isDragging) return;
-    const x = event.clientX - moviesRef.current.offsetLeft;
-    const walk = (x - startX) * 2; // Adjust the multiplier for faster scrolling
-    moviesRef.current.scrollLeft = scrollLeft - walk;
+    if (moviesRef.current) {
+      const x = event.clientX - moviesRef.current.offsetLeft;
+      const walk = (x - startX) * 2; // Adjust the multiplier for faster scrolling
+      moviesRef.current.scrollLeft = scrollLeft - walk;
+    }
   };
 
   const handleMouseUp = () => {
@@ -58,8 +64,12 @@ export default function DragMenu({ url, title, queryParams, toggleButton = [] })
 
   const handleModeChange = (mode) => {
     setSelectedMode(mode);
-    fetchMovies(mode); // Fetch data immediately when the mode changes
+    fetchMovies(mode); // Fetch movies immediately when mode changes
   };
+
+  if (movies.length === 0) {
+    return null; // Return null if movies array is empty
+  }
 
   return (
     <div className="section" id="dragMenu">
@@ -83,7 +93,7 @@ export default function DragMenu({ url, title, queryParams, toggleButton = [] })
           {movies.map((element) => (
             <Link
               key={element.id}
-              className="img-container"
+              className="poster-container"
               to={`/${element.media_type}/${element.id}?language=en`}
             >
               <img

@@ -11,7 +11,7 @@
 #dragMenu .movies.dragging {
     cursor: grabbing;
 }
-#dragMenu .img-container {
+#dragMenu .poster-container {
     width: 200px;
     height: 300px;
     overflow: hidden;

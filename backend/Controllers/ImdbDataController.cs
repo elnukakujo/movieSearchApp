@@ -30,15 +30,21 @@ namespace backend.Controllers
         [HttpGet("top_rated")]
         public async Task<IActionResult> GetTopRated([FromQuery] string SelectedMode, [FromQuery] string Language)
         {
-            var topRatedMovies = await _tmdbService.GetTopRatedAsync(SelectedMode, Language);
-            return Ok(topRatedMovies);
+            var topRated = await _tmdbService.GetTopRatedAsync(SelectedMode, Language);
+            return Ok(topRated);
             
         }
         [HttpGet("search")]
         public async Task<IActionResult> Search([FromQuery] string MediaType, [FromQuery] int id, [FromQuery] string Language)
         {
-            var searchResults = await _tmdbService.GetDetails(MediaType, id, Language);
+            var searchResults = await _tmdbService.GetDetailsAsync(MediaType, id, Language);
             return Ok(searchResults);
+        }
+        [HttpGet("recommendation")]
+        public async Task<IActionResult> Recommendation([FromQuery] string MediaType, [FromQuery] int id, [FromQuery] string Language)
+        {
+            var recommendationResults = await _tmdbService.GetRecommendationAsync(MediaType, id, Language);
+            return Ok(recommendationResults);
         }
     }
 }
