@@ -17,8 +17,8 @@ namespace backend.Controllers
         [HttpGet("upcoming")]
         public async Task<IActionResult> GetUpcomingMovies([FromQuery] string Language, [FromQuery] string Region)
         {
-            var trendingMovies = await _tmdbService.GetUpcomingMoviesAsync(Language, Region);
-            return Ok(trendingMovies);
+            var upcomingMovies = await _tmdbService.GetUpcomingMoviesAsync(Language, Region);
+            return Ok(upcomingMovies);
         }
 
         [HttpGet("trending")]
@@ -30,17 +30,15 @@ namespace backend.Controllers
         [HttpGet("top_rated")]
         public async Task<IActionResult> GetTopRatedMovies([FromQuery] string Language)
         {
-            try
-            {
-                var topRatedMovies = await _tmdbService.GetTopRatedMoviesAsync(Language);
-                return Ok(topRatedMovies);
-            }
-            catch (Exception ex)
-            {
-                // Log the exception for debugging
-                Console.WriteLine($"Error fetching top rated movies: {ex.Message}");
-                return StatusCode(500, "Internal server error");
-            }
+            var topRatedMovies = await _tmdbService.GetTopRatedMoviesAsync(Language);
+            return Ok(topRatedMovies);
+            
+        }
+        [HttpGet("search")]
+        public async Task<IActionResult> SearchMovies([FromQuery] int movie_id, [FromQuery] string Language)
+        {
+            var searchResults = await _tmdbService.GetMovieDetails(movie_id, Language);
+            return Ok(searchResults);
         }
     }
 }

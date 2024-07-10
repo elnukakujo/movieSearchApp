@@ -1,6 +1,6 @@
 import './assets/css/App.css';
 import Home from './pages/Home';
-import Detail from './pages/Detail';
+import MovieDetails from './pages/MovieDetails';
 
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
@@ -10,7 +10,7 @@ export default function App() {
       <div className="App">
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/detail" element={<Detail />} />
+            <Route path="/:id" component={MovieDetails} />
           </Routes>
       </div>
     </Router>
