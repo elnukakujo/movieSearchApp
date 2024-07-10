@@ -1,6 +1,6 @@
 import './assets/css/App.css';
 import Home from './pages/Home';
-import MovieDetails from './pages/MovieDetails';
+import Details from './pages/Details';
 
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 
@@ -10,7 +10,7 @@ export default function App() {
       <div className="App">
           <Routes>
             <Route path="/" element={<Home />} />
-            <Route path="/:id" component={MovieDetails} />
+            <Route path="/:media_type/:id" element={<Details />} />
           </Routes>
       </div>
     </Router>

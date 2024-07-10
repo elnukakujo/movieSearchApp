@@ -22,22 +22,22 @@ namespace backend.Controllers
         }
 
         [HttpGet("trending")]
-        public async Task<IActionResult> GetTrendingMovies([FromQuery] string TimeInterval, [FromQuery] string Language)
+        public async Task<IActionResult> GetTrending([FromQuery] string SelectedMode, [FromQuery] string Language)
         {
-            var trendingMovies = await _tmdbService.GetTrendingMoviesAsync(TimeInterval, Language);
+            var trendingMovies = await _tmdbService.GetTrendingAsync(SelectedMode, Language);
             return Ok(trendingMovies);
         }
         [HttpGet("top_rated")]
-        public async Task<IActionResult> GetTopRatedMovies([FromQuery] string Language)
+        public async Task<IActionResult> GetTopRated([FromQuery] string SelectedMode, [FromQuery] string Language)
         {
-            var topRatedMovies = await _tmdbService.GetTopRatedMoviesAsync(Language);
+            var topRatedMovies = await _tmdbService.GetTopRatedAsync(SelectedMode, Language);
             return Ok(topRatedMovies);
             
         }
         [HttpGet("search")]
-        public async Task<IActionResult> SearchMovies([FromQuery] int movie_id, [FromQuery] string Language)
+        public async Task<IActionResult> Search([FromQuery] string MediaType, [FromQuery] int id, [FromQuery] string Language)
         {
-            var searchResults = await _tmdbService.GetMovieDetails(movie_id, Language);
+            var searchResults = await _tmdbService.GetDetails(MediaType, id, Language);
             return Ok(searchResults);
         }
     }

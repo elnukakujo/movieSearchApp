@@ -1,21 +1,21 @@
 import React, { useState, useEffect, useRef } from 'react';
-import '../assets/css/components/dragMenu.css';
-import ToggleButton from './toggleButton';
 import { Link } from 'react-router-dom';
+import ToggleButton from './ToggleButton'; // Import ToggleButton component
+import '../assets/css/components/dragMenu.css';
 
-export default function DragMenu({ url, title, id, queryParams, toggleButton }) {
+export default function DragMenu({ url, title, queryParams, toggleButton = [] }) {
   const [movies, setMovies] = useState([]);
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
-  const [selectedMode, setSelectedMode] = useState('day');
+  const [selectedMode, setSelectedMode] = useState(toggleButton[0] || ''); // Default to empty string if toggleButton[0] is not available
   const moviesRef = useRef(null);
 
-  const fetchMovies = async () => {
+  const fetchMovies = async (mode) => {
     let fullUrl = new URL(url);
     fullUrl.search = new URLSearchParams(queryParams).toString();
-    if (toggleButton) {
-      fullUrl.searchParams.append('TimeInterval', selectedMode);
+    if (toggleButton.length > 0 && mode) {
+      fullUrl.searchParams.append('SelectedMode', mode);
     }
     try {
       const response = await fetch(fullUrl);
@@ -32,10 +32,8 @@ export default function DragMenu({ url, title, id, queryParams, toggleButton }) 
   };
 
   useEffect(() => {
-    fetchMovies();
-    const interval = setInterval(fetchMovies, 5000);
-    return () => clearInterval(interval);
-  }, [selectedMode, toggleButton]);
+    fetchMovies(selectedMode);
+  }, [url, queryParams]);
 
   const handleMouseDown = (event) => {
     setIsDragging(true);
@@ -60,14 +58,16 @@ export default function DragMenu({ url, title, id, queryParams, toggleButton }) 
 
   const handleModeChange = (mode) => {
     setSelectedMode(mode);
+    fetchMovies(mode); // Fetch data immediately when the mode changes
   };
 
   return (
-    <div className="section" id={id}>
+    <div className="section" id="dragMenu">
       <div className="content">
         <h2>{title}</h2>
-        {toggleButton && (
+        {toggleButton.length > 0 && (
           <ToggleButton
+            modes={toggleButton}
             selectedMode={selectedMode}
             onModeChange={handleModeChange}
           />
@@ -81,7 +81,11 @@ export default function DragMenu({ url, title, id, queryParams, toggleButton }) 
           onMouseLeave={handleMouseLeave}
         >
           {movies.map((element) => (
-            <Link key={element.id} className="img-container" to={`/movie/${element.id}`}>
+            <Link
+              key={element.id}
+              className="img-container"
+              to={`/${element.media_type}/${element.id}?language=en`}
+            >
               <img
                 src={element.poster_path}
                 alt={element.title}
