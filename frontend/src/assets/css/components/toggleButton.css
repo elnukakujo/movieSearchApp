@@ -18,6 +18,10 @@
     transition: 0.3s;
 }
 
+.toggle-button:hover{
+    filter: brightness(90%);
+}
+
 .selected{
     background-color: #fa4949;
 }
