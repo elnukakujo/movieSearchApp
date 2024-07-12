@@ -1,9 +1,9 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import ToggleButton from './ToggleButton'; // Import ToggleButton component
-import '../assets/css/components/dragMenu.css'; // Ensure correct path to CSS file
+import '../assets/css/components/dragPosters.css'; // Ensure correct path to CSS file
 
-export default function DragMenu({ url, title, queryParams, toggleButton = [] }) {
+export default function DragPosters({ url, title, queryParams, toggleButton = [] }) {
   const [movies, setMovies] = useState([]);
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
@@ -72,7 +72,7 @@ export default function DragMenu({ url, title, queryParams, toggleButton = [] })
   }
 
   return (
-    <div className="section" id="dragMenu">
+    <div className="section" id="dragPosters">
       <div className="content">
         <h2>{title}</h2>
         {toggleButton.length > 0 && (
@@ -95,6 +95,7 @@ export default function DragMenu({ url, title, queryParams, toggleButton = [] })
               key={element.id}
               className="poster-container"
               to={`/${element.media_type}/${element.id}?language=en`}
+              draggable="false"
             >
               <img
                 src={element.poster_path}

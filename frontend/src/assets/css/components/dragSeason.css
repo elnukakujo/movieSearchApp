@@ -1,0 +1,39 @@
+#dragSeason .episodes{
+    display: flex;
+    overflow-x: auto; /* Enable horizontal scrolling */
+    scroll-snap-type: x mandatory; /* Enables snapping to each image */
+    scroll-behavior: smooth; /* Smooth scrolling */
+    padding: 10px;
+    cursor: grab;
+    user-select: none;
+    scrollbar-width: none; /* Hides scrollbar */
+}
+#dragSeason .episodes.dragging {
+    cursor: grabbing;
+}
+#dragSeason a{
+    text-decoration: none;
+    color: black;
+}
+#dragSeason a:hover{
+    color:rgb(65, 65, 65);
+}
+#dragSeason .img-container {
+    width: 300px;
+    height: 200px;
+    overflow: hidden;
+    display: inline-block;
+    margin-right: 10px;
+    flex: 0 0 auto; /* Prevents shrinking */
+    scroll-snap-align: start;
+}
+
+#dragSeason .img-container:hover {
+    filter: brightness(90%);
+}
+
+#dragSeason img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}

@@ -46,5 +46,17 @@ namespace backend.Controllers
             var recommendationResults = await _tmdbService.GetRecommendationAsync(MediaType, id, Language);
             return Ok(recommendationResults);
         }
+        [HttpGet("seasonsDetails")]
+        public async Task<IActionResult> GetSeasonsDetails([FromQuery] int SeriesID, [FromQuery] int SeasonID, [FromQuery] string Language)
+        {
+            var seasonResults = await _tmdbService.GetSeasonsDetailsAsync(SeriesID, SeasonID, Language);
+            return Ok(seasonResults);
+        }
+        [HttpGet("episodeDetails")]
+        public async Task<IActionResult> GetEpisodeDetails([FromQuery] int serie_id, [FromQuery] int season_number, [FromQuery] int episode_number, [FromQuery] string Language)
+        {
+            var episodeResults = await _tmdbService.GetEpisodeDetailsAsync(serie_id, season_number, episode_number, Language);
+            return Ok(episodeResults);
+        }
     }
 }
