@@ -91,7 +91,7 @@ export default function DragPosters({ url, title, queryParams, toggleButton = []
           onMouseLeave={handleMouseLeave}
         >
           {movies.map((element) => (
-            element.poster_path!="https://image.tmdb.org/t/p/w500" && (
+            element.poster_path!=="https://image.tmdb.org/t/p/w500" && (
               <Link
                 key={element.id}
                 className="poster-container"

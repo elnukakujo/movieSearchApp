@@ -39,7 +39,7 @@ export default function Details() {
   function getDuration(runtime) {
       if(runtime>60){
           let min = (runtime%60).toString();
-          if(min.length==1) min = "0"+min;
+          if(min.length===1) min = "0"+min;
           return (Math.floor(runtime/60)).toString()+"h"+min;
       }else{
           return runtime.toString()+"min"
@@ -50,8 +50,8 @@ export default function Details() {
     <div className="section" id="details">
       <div className="content">
         {
-          element.backdrop_path!="https://image.tmdb.org/t/p/w500" && 
-          element.backdrop_path!="https://image.tmdb.org/t/p/w780" && 
+          element.backdrop_path!=="https://image.tmdb.org/t/p/w500" && 
+          element.backdrop_path!=="https://image.tmdb.org/t/p/w780" && 
           (
             <a href={element.homepage} target="_blank" rel="noreferrer" className="bg-container">
               <img src={element.backdrop_path} alt={'Background image'} />

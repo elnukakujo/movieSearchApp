@@ -29,7 +29,7 @@ export default function SearchResults(){
         <h1>Search Results for: {term}</h1>
         <div className='results'>
           {results.map((result)=>(
-            result.poster_path!="https://image.tmdb.org/t/p/w500" && (
+            result.poster_path!=="https://image.tmdb.org/t/p/w500" && (
               <Link
                 key={result.id}
                 className="poster-container"
