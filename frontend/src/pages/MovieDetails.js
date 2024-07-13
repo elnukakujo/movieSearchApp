@@ -18,7 +18,7 @@ export default function Details() {
     const fetchMovies = async () => {
       try {
         let fullUrl = new URL(
-          `http://127.0.0.1:5252/api/TmdbData/search?MediaType=${media_type}&id=${id}&Language=${language}`
+          `http://127.0.0.1:5252/api/TmdbData/findById?MediaType=${media_type}&id=${id}&Language=${language}`
         );
         const response = await fetch(fullUrl);
         if (!response.ok) {
@@ -37,22 +37,27 @@ export default function Details() {
   }, [media_type, id, language]);
 
   function getDuration(runtime) {
-    console.log(element.runtime)
       if(runtime>60){
-          let min = (element.runtime%60).toString()
-          if(min.length===1) min = "0"+min
-          return (Math.floor(element.runtime/60)).toString()+"h"+min;
+          let min = (runtime%60).toString();
+          if(min.length==1) min = "0"+min;
+          return (Math.floor(runtime/60)).toString()+"h"+min;
       }else{
-          return element.runtime.toString()+"min"
+          return runtime.toString()+"min"
       }
   }
 
   return (
     <div className="section" id="details">
       <div className="content">
-        <a href={element.homepage} target="_blank" rel="noreferrer" className="bg-container">
-          <img src={element.backdrop_path} alt={'Background image'} />
-        </a>
+        {
+          element.backdrop_path!="https://image.tmdb.org/t/p/w500" && 
+          element.backdrop_path!="https://image.tmdb.org/t/p/w780" && 
+          (
+            <a href={element.homepage} target="_blank" rel="noreferrer" className="bg-container">
+              <img src={element.backdrop_path} alt={'Background image'} />
+            </a>
+          )
+        }
         <h2>{element.title || element.name}</h2>
         {element.adult && <h4>Adult Content</h4>}
         <h4>Status: {element.status}</h4>

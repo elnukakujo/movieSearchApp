@@ -34,7 +34,7 @@ namespace backend.Controllers
             return Ok(topRated);
             
         }
-        [HttpGet("search")]
+        [HttpGet("findById")]
         public async Task<IActionResult> Search([FromQuery] string MediaType, [FromQuery] int id, [FromQuery] string Language)
         {
             var searchResults = await _tmdbService.GetDetailsAsync(MediaType, id, Language);
@@ -56,6 +56,12 @@ namespace backend.Controllers
         public async Task<IActionResult> GetEpisodeDetails([FromQuery] int serie_id, [FromQuery] int season_number, [FromQuery] int episode_number, [FromQuery] string Language)
         {
             var episodeResults = await _tmdbService.GetEpisodeDetailsAsync(serie_id, season_number, episode_number, Language);
+            return Ok(episodeResults);
+        }
+        [HttpGet("search")]
+        public async Task<IActionResult> GetSearchDetails([FromQuery] string Query, [FromQuery] string Language)
+        {
+            var episodeResults = await _tmdbService.GetSearchDetailsAsync(Query, Language);
             return Ok(episodeResults);
         }
     }

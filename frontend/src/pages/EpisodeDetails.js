@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useParams, useLocation } from 'react-router-dom';
 
 export default function EpisodeDetails() {
@@ -29,7 +29,9 @@ export default function EpisodeDetails() {
 
     function getDuration(runtime) {
         if(runtime>60){
-            return (Math.floor(episode.runtime/60)).toString()+"h"+(episode.runtime%60).toString()
+            let min = (runtime%60).toString()
+            if(min.length==1) min = "0"+min;
+            return (Math.floor(runtime/60)).toString()+"h"+min;
         }else{
             return episode.runtime.toString()+"min"
         }

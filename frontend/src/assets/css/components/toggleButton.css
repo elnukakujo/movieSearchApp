@@ -16,10 +16,12 @@
     border-radius: 16px;
     width: 100%;
     transition: 0.3s;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
 .toggle-button:hover{
     filter: brightness(90%);
+    transform: scale(1.03);
 }
 
 .selected{

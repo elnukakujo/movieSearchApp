@@ -37,3 +37,7 @@
     height: 100%;
     object-fit: cover;
 }
+
+#dragSeason p{
+    margin:5px 0px 0px;
+}

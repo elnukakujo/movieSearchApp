@@ -91,18 +91,20 @@ export default function DragPosters({ url, title, queryParams, toggleButton = []
           onMouseLeave={handleMouseLeave}
         >
           {movies.map((element) => (
-            <Link
-              key={element.id}
-              className="poster-container"
-              to={`/${element.media_type}/${element.id}?language=en`}
-              draggable="false"
-            >
-              <img
-                src={element.poster_path}
-                alt={element.title}
+            element.poster_path!="https://image.tmdb.org/t/p/w500" && (
+              <Link
+                key={element.id}
+                className="poster-container"
+                to={`/${element.media_type}/${element.id}?language=en`}
                 draggable="false"
-              />
-            </Link>
+              >
+                <img
+                  src={element.poster_path}
+                  alt={element.title}
+                  draggable="false"
+                />
+              </Link>
+            )
           ))}
         </div>
       </div>
