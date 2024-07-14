@@ -3,8 +3,6 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 17
 VisualStudioVersion = 17.5.002.0
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ImdbApiDownload", "ImdbApiDownload\ImdbApiDownload.csproj", "{AC7F8926-0106-4EE2-B519-8162203834F8}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "backend", "backend\backend.csproj", "{FF0D296E-546A-4BA0-87D4-8E3DA7B604AD}"
 EndProject
 Global
