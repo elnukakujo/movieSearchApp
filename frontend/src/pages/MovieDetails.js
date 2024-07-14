@@ -48,15 +48,13 @@ export default function Details() {
 
   return (
     <div className="section" id="details">
-      <div className="content">
-        {
-          element.backdrop_path!=="https://image.tmdb.org/t/p/w500" && 
-          element.backdrop_path!=="https://image.tmdb.org/t/p/w780" && 
-          (
-            <a href={element.homepage} target="_blank" rel="noreferrer" className="bg-container">
-              <img src={element.backdrop_path} alt={'Background image'} />
-            </a>
-          )
+      <div className="content" >
+        {element.backdrop_path !== "https://image.tmdb.org/t/p/w500" && 
+        element.backdrop_path !== "https://image.tmdb.org/t/p/w780" &&
+        <a href={element.homepage} target='_blank' className='bg-container'>
+          <img
+          src={element.backdrop_path}/>
+        </a>
         }
         <h2>{element.title || element.name}</h2>
         {element.adult && <h4>Adult Content</h4>}

@@ -1,8 +1,8 @@
-.App{
-}
 .page-content{
     margin: 0px auto;
-    padding-top: 100px;
+    padding: 100px 20px 0px;
     min-width: 415px;
-    max-width: 1200px;
+    max-width: 1300px;
+    background-color: #ffffff;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }

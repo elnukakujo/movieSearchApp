@@ -1,12 +1,22 @@
+#dragPosters{
+    background-color: #ffffff;
+    padding: 15px;
+    margin-bottom: 10px;
+}
+#dragPosters:nth-child(even){
+    background-color: #f9f9f9;
+}
 #dragPosters .movies{
     display: flex;
     overflow-x: auto; /* Enable horizontal scrolling */
+    overflow-y: clip;
     scroll-snap-type: x mandatory; /* Enables snapping to each image */
     scroll-behavior: smooth; /* Smooth scrolling */
     padding: 10px;
     cursor: grab;
     user-select: none;
     scrollbar-width: none; /* Hides scrollbar */
+    border-radius: 10px;
 }
 #dragPosters .movies.dragging {
     cursor: grabbing;
@@ -30,4 +40,5 @@
     height: 100%;
     object-fit: cover;
     border-radius: 10px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
 }
