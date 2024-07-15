@@ -1,8 +1,9 @@
 import React from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import MovieSearchAppLogo from '../assets/img/movieSearchAppLogo.jpg';
 import '../assets/css/components/NavBar.css';
 import SearchBar from './SearchBar';
+import { FontAwesomeIcon } from '@fortawesome/react-fontawesome';
+import { faFilm } from '@fortawesome/free-solid-svg-icons';
 
 export default function NavBar(){
     const navigate = useNavigate();
@@ -17,11 +18,7 @@ export default function NavBar(){
         <div className="navbar">
             <div className='content'>
                 <Link to='/'>
-                    <div className='logo-container'>
-                        <img
-                            src={MovieSearchAppLogo}
-                        />
-                    </div>
+                    <FontAwesomeIcon icon={faFilm} id='icon'/>
                 </Link>
                 <Link to='/'>
                     <h1>NoeFlix</h1>

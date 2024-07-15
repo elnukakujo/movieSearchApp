@@ -38,6 +38,9 @@ export default function DragPosters({ url, title, queryParams, toggleButton = []
   }, [url, queryParams]); // Fetch movies when URL or queryParams change
 
   const handleMouseDown = (event) => {
+    if (event.target.tagName.toLowerCase() === 'a') {
+      event.preventDefault(); // Prevent default behavior if clicking on a link
+    }
     setIsDragging(true);
     if (moviesRef.current) {
       setStartX(event.clientX - moviesRef.current.offsetLeft);

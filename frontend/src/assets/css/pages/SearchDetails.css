@@ -3,9 +3,7 @@
 #search-results {
     padding: 10px;
 }
-#search-results .content {
-  /* Styles for the content area */
-}
+
 #search-results .results {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(200px, 2fr)); /* Adjust grid columns as needed */
@@ -33,5 +31,6 @@
 #search-results .poster-container:hover {
   filter: brightness(90%);
   transform: scale(1.05);
+  transition: transform 0.8s ease;
   z-index: 0;
 }

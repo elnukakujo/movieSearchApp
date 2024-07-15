@@ -33,6 +33,7 @@
 #dragPosters .poster-container:hover {
     filter: brightness(90%);
     transform: scale(1.05);
+    transition: transform 0.8s ease;
 }
 
 #dragPosters img {

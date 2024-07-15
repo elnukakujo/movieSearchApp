@@ -43,6 +43,9 @@ export default function DragSeason({ url, queryParams, toggleButton }) {
 
   // Handle mouse events for dragging functionality
   const handleMouseDown = (event) => {
+    if (event.target.tagName.toLowerCase() === 'a') {
+      event.preventDefault(); // Prevent default behavior if clicking on a link
+    }
     setIsDragging(true);
     if (episodesRef.current) {
       setStartX(event.clientX - episodesRef.current.offsetLeft);
