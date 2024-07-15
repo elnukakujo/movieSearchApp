@@ -16,7 +16,7 @@ export default function App() {
             <Routes>
               <Route path="/" element={<Home />} />
               <Route path="/:media_type/:id" element={<MovieDetails />} />
-              <Route path="/tv/:serie_id/:season_number/:episode_number" element={<EpisodeDetails />} />
+              <Route path="/tv/:id/:season_number/:episode_number" element={<EpisodeDetails />} />
               <Route path="/search/:term" element={<SearchDetails />} />
             </Routes>
           </div>

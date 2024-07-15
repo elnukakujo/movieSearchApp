@@ -47,15 +47,15 @@ namespace backend.Controllers
             return Ok(recommendationResults);
         }
         [HttpGet("seasonsDetails")]
-        public async Task<IActionResult> GetSeasonsDetails([FromQuery] int SeriesID, [FromQuery] int SeasonID, [FromQuery] string Language)
+        public async Task<IActionResult> GetSeasonsDetails([FromQuery] int id, [FromQuery] int SeasonID, [FromQuery] string Language)
         {
-            var seasonResults = await _tmdbService.GetSeasonsDetailsAsync(SeriesID, SeasonID, Language);
+            var seasonResults = await _tmdbService.GetSeasonsDetailsAsync(id, SeasonID, Language);
             return Ok(seasonResults);
         }
         [HttpGet("episodeDetails")]
-        public async Task<IActionResult> GetEpisodeDetails([FromQuery] int serie_id, [FromQuery] int season_number, [FromQuery] int episode_number, [FromQuery] string Language)
+        public async Task<IActionResult> GetEpisodeDetails([FromQuery] int id, [FromQuery] int season_number, [FromQuery] int episode_number, [FromQuery] string Language)
         {
-            var episodeResults = await _tmdbService.GetEpisodeDetailsAsync(serie_id, season_number, episode_number, Language);
+            var episodeResults = await _tmdbService.GetEpisodeDetailsAsync(id, season_number, episode_number, Language);
             return Ok(episodeResults);
         }
         [HttpGet("search")]

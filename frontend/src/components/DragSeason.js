@@ -4,7 +4,7 @@ import ToggleButton from "./ToggleButton";
 import "../assets/css/components/dragSeason.css";
 
 export default function DragSeason({ url, queryParams, toggleButton }) {
-  const { id } = useParams(); // Get media_type from route parameter
+  const { id } = useParams();
   const [episodes, setEpisodes] = useState([]);
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);

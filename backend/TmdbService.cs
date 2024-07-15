@@ -71,35 +71,116 @@ namespace backend
         }
         public async Task<JsonNode> GetDetailsAsync([FromQuery] string MediaType, [FromQuery] int id, [FromQuery] string Language)
         {
-            var url = $"https://api.themoviedb.org/3/{MediaType}/{id}?api_key={_apiKey}&language={Language}";
-            var response = await _httpClient.GetAsync(url);
-            response.EnsureSuccessStatusCode();
-
-            var content = await response.Content.ReadAsStringAsync();
-            JsonNode details = JsonNode.Parse(content);
-
-            // Transform poster_path and backdrop_path URLs
-            details["poster_path"] = $"https://image.tmdb.org/t/p/w500{details["poster_path"]?.ToString()}";
-            details["backdrop_path"] = $"https://image.tmdb.org/t/p/w780{details["backdrop_path"]?.ToString()}";
-
-            // Transform belongs_to_collection poster_path and backdrop_path URLs
-            if (details["belongs_to_collection"] != null)
+            try
             {
-                details["belongs_to_collection"]["poster_path"] = $"https://image.tmdb.org/t/p/w500{details["belongs_to_collection"]["poster_path"]?.ToString()}";
-                details["belongs_to_collection"]["backdrop_path"] = $"https://image.tmdb.org/t/p/w780{details["belongs_to_collection"]["backdrop_path"]?.ToString()}";
-            }
+                var url = $"https://api.themoviedb.org/3/{MediaType}/{id}?api_key={_apiKey}&language={Language}";
+                var response = await _httpClient.GetAsync(url);
+                response.EnsureSuccessStatusCode();
 
-            // Transform production_companies logo_path URLs
-            foreach (JsonNode productionCompany in details["production_companies"].AsArray())
-            {
-                if (productionCompany != null && productionCompany["logo_path"] != null)
+                var content = await response.Content.ReadAsStringAsync();
+                JsonNode details = JsonNode.Parse(content);
+
+                // Transform poster_path and backdrop_path URLs
+                details["poster_path"] = $"https://image.tmdb.org/t/p/w500{details["poster_path"]?.ToString()}";
+                details["backdrop_path"] = $"https://image.tmdb.org/t/p/w780{details["backdrop_path"]?.ToString()}";
+
+                // Transform belongs_to_collection poster_path and backdrop_path URLs
+                if (details["belongs_to_collection"] is JsonObject collection && collection.ContainsKey("poster_path") && collection.ContainsKey("backdrop_path"))
                 {
-                    string logoPath = productionCompany["logo_path"].ToString();
-                    productionCompany["logo_path"] = $"https://image.tmdb.org/t/p/w500{logoPath}";
+                    collection["poster_path"] = $"https://image.tmdb.org/t/p/w500{collection["poster_path"]?.ToString()}";
+                    collection["backdrop_path"] = $"https://image.tmdb.org/t/p/w780{collection["backdrop_path"]?.ToString()}";
                 }
-            }
 
-            return details;
+                // Transform production_companies logo_path URLs
+                foreach (JsonNode productionCompany in details["production_companies"].AsArray())
+                {
+                    if (productionCompany != null && productionCompany["logo_path"] != null)
+                    {
+                        string logoPath = productionCompany["logo_path"].ToString();
+                        productionCompany["logo_path"] = $"https://image.tmdb.org/t/p/w500{logoPath}";
+                    }
+                }
+
+                // Get the cast and crew profiles
+                var creditsUrl = $"https://api.themoviedb.org/3/{MediaType}/{id}/credits?api_key={_apiKey}&language={Language}";
+                var creditsResponse = await _httpClient.GetAsync(creditsUrl);
+                creditsResponse.EnsureSuccessStatusCode();
+
+                var creditsContent = await creditsResponse.Content.ReadAsStringAsync();
+                var credits = JsonNode.Parse(creditsContent).AsObject();
+
+                if (credits != null)
+                {
+                    var castArray = new JsonArray();
+                    if (credits.ContainsKey("cast") && credits["cast"] is JsonArray cast)
+                    {
+                        foreach (JsonNode starNode in cast)
+                        {
+                            if (starNode is JsonObject starObject && starObject.ContainsKey("profile_path"))
+                            {
+                                var profilePath = starObject["profile_path"]?.ToString();
+                                if (!string.IsNullOrEmpty(profilePath))
+                                {
+                                    starObject["profile_path"] = $"https://image.tmdb.org/t/p/w500{profilePath}";
+                                }
+                            }
+                            // Create a new JsonObject instance and add it to castArray
+                            var newStarNode = new JsonObject();
+                            foreach (var property in starNode?.AsObject() ?? Enumerable.Empty<KeyValuePair<string, JsonNode>>())
+                            {
+                                if (property.Value != null)
+                                {
+                                    newStarNode[property.Key] = property.Value.DeepClone(); // Clone the property value if it's not null
+                                }
+                                else
+                                {
+                                    newStarNode[property.Key] = null; // Set the property value to null if it's null
+                                }
+                            }
+                            castArray.Add(newStarNode);
+                        }
+                        details["cast"] = castArray;
+                    }
+
+                    var crewArray = new JsonArray();
+                    if (credits.ContainsKey("crew") && credits["crew"] is JsonArray crew)
+                    {
+                        foreach (JsonNode crewNode in crew)
+                        {
+                            if (crewNode is JsonObject crewObject && crewObject.ContainsKey("profile_path"))
+                            {
+                                var profilePath = crewObject["profile_path"]?.ToString();
+                                if (!string.IsNullOrEmpty(profilePath))
+                                {
+                                    crewObject["profile_path"] = $"https://image.tmdb.org/t/p/w500{profilePath}";
+                                }
+                            }
+                            // Create a new JsonObject instance and add it to crewArray
+                            var newCrewNode = new JsonObject();
+                            foreach (var property in crewNode?.AsObject() ?? Enumerable.Empty<KeyValuePair<string, JsonNode>>())
+                            {
+                                if (property.Value != null)
+                                {
+                                    newCrewNode[property.Key] = property.Value.DeepClone(); // Clone the property value if it's not null
+                                }
+                                else
+                                {
+                                    newCrewNode[property.Key] = null; // Set the property value to null if it's null
+                                }
+                            }
+                            crewArray.Add(newCrewNode);
+                        }
+                        details["crew"] = crewArray;
+                    }
+                }
+                return details;
+            }
+            catch (Exception ex)
+            {
+                // Handle or log the exception appropriately
+                Console.WriteLine($"An error occurred while fetching movie details: {ex.Message}");
+                throw; // Rethrow the exception to propagate it up the call stack
+            }
         }
         public async Task<JsonNode> GetRecommendationAsync([FromQuery] string SelectedMode, [FromQuery] int id, [FromQuery] string Language)
         {
@@ -119,9 +200,9 @@ namespace backend
 
             return recommendations;
         }
-        public async Task<JsonNode> GetSeasonsDetailsAsync([FromQuery] int series_id, [FromQuery] int season_number, [FromQuery] string Language)
+        public async Task<JsonNode> GetSeasonsDetailsAsync([FromQuery] int id, [FromQuery] int season_number, [FromQuery] string Language)
         {
-            var options = new RestClientOptions($"https://api.themoviedb.org/3/tv/{series_id}/season/{season_number}?api_key={_apiKey}&language={Language}");
+            var options = new RestClientOptions($"https://api.themoviedb.org/3/tv/{id}/season/{season_number}?api_key={_apiKey}&language={Language}");
             var client = new RestClient(options);
             var request = new RestRequest("");
             var response = await client.GetAsync(request);
@@ -134,10 +215,10 @@ namespace backend
 
             return episodes;
         }
-        public async Task<JsonNode> GetEpisodeDetailsAsync([FromQuery] int serie_id, [FromQuery] int season_number, [FromQuery] int episode_number, [FromQuery] string Language)
+        public async Task<JsonNode> GetEpisodeDetailsAsync([FromQuery] int id, [FromQuery] int season_number, [FromQuery] int episode_number, [FromQuery] string Language)
         {
             var options = new RestClientOptions(
-                $"https://api.themoviedb.org/3/tv/{serie_id}/season/{season_number}/episode/{episode_number}?api_key={_apiKey}&language={Language}"
+                $"https://api.themoviedb.org/3/tv/{id}/season/{season_number}/episode/{episode_number}?api_key={_apiKey}&language={Language}"
             );
             var client = new RestClient(options);
             var request = new RestRequest("");

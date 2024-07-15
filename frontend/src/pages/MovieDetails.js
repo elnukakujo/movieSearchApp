@@ -3,6 +3,7 @@ import { useParams, useLocation } from 'react-router-dom';
 import '../assets/css/pages/movieDetails.css';
 import DragPosters from '../components/DragPosters';
 import DragSeason from '../components/DragSeason';
+import ActorsLayout from '../components/ActorsLayout';
 
 export default function Details() {
   const { media_type, id } = useParams(); // Get movie_id from route parameter
@@ -69,9 +70,9 @@ export default function Details() {
             <h1>{element.title || element.name}</h1>
             {element.adult && <h4>Adult Content</h4>}
             <h4>Status: {element.status}</h4>
-            {element.runtime && (
+            {element.runtime && element.runtime !== 0 ? (
               <p>Duration: {getDuration(element.runtime)}</p>
-            )}
+            ) : null}
             <h4>Release Date: {element.release_date || element.first_air_date}</h4>
             <h3>{element.tagline}</h3>
             <p>{element.overview}</p>
@@ -86,21 +87,30 @@ export default function Details() {
             </ul>
             <h4>Original Language:</h4>
             <p>{element.original_language ? element.original_language.toUpperCase() : 'N/A'}</p>
-            <h4>Produced in:</h4>
-            <ul>
-              {element.production_countries?.map((country, index) => (
-                <li key={index}>{country.name}</li>
-              ))}
-            </ul>
+            {element.created_by &&
+            element.created_by!==null &&
+            (
+              <div>
+                <h4>Created by:</h4>
+                <ul>
+                  {element.created_by.map((person, index) => (
+                    <li key={index}>{person.name}</li>
+                  ))}
+                </ul>
+              </div>
+            )}
           </div>
         </div>
         {media_type === 'tv' && element.seasons && element.seasons.length > 0 && (
           <DragSeason
             url={"http://127.0.0.1:5252/api/TmdbData/seasonsDetails"}
-            queryParams={`SeriesID=${id}&Language=${language}`}
+            queryParams={`id=${id}&Language=${language}`}
             toggleButton={element.seasons.map(season => season.season_number.toString())} // Assuming `element.seasons` is an array of objects with `season_number`
           />
         )}
+        <ActorsLayout
+          actors={element.cast}
+        />
         <DragPosters
             url={'http://127.0.0.1:5252/api/TmdbData/recommendation'}
             title="Recommendations"

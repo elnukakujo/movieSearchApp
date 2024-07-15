@@ -1,0 +1,36 @@
+#actors-layout .content{
+    display: flex;
+    flex-wrap: wrap;
+}
+
+#actors-layout .actors{
+    display: flex;
+    overflow-x: auto; /* Enable horizontal scrolling */
+    overflow-y: clip;
+    scroll-snap-type: x mandatory; /* Enables snapping to each image */
+    scroll-behavior: smooth; /* Smooth scrolling */
+    padding: 10px;
+    cursor: grab;
+    user-select: none;
+    scrollbar-width: none; /* Hides scrollbar */
+    border-radius: 10px;
+    height:auto;
+}
+#actors-layout .actors .actor {
+    margin-right: 20px;
+}
+#actors-layout .actors .profile-container {
+    width: 150px;
+    height: 150px;
+    border-radius: 50%;
+    overflow: hidden;
+    display: inline-block;
+    margin-right: 10px;
+    flex: 0 0 auto; /* Prevents shrinking */
+    scroll-snap-align: start;
+}
+#actors-layout .actors .actor img{
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
