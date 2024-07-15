@@ -12,8 +12,6 @@ export default function Details() {
   const language = queryParams.get('language') || 'en'; // Default to 'en' if language not specified
   const [element, setElement] = useState({});
   const dateStr = element.release_date || element.first_air_date;
-  const date = new Date(dateStr);
-  const currentDate = new Date();
 
   useEffect(() => {
     const fetchMovies = async () => {
@@ -76,9 +74,9 @@ export default function Details() {
             <h4>Release Date: {element.release_date || element.first_air_date}</h4>
             <h3>{element.tagline}</h3>
             <p>{element.overview}</p>
-            {date < currentDate && (
+            {element.vote_average!=0 ? (
               <p>Rating: {Math.round(element.vote_average*100)/100}</p>
-            )}
+            ): null}
             <h4>Genres:</h4>
             <ul>
               {element.genres?.map((genre, index) => (

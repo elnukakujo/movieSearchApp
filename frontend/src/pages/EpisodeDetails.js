@@ -60,7 +60,9 @@ export default function EpisodeDetails() {
                         <h2>{episode.name}</h2>
                         <h4>Release Date: {episode.air_date}</h4>
                         <p>{episode.overview}</p>
+                        {episode.vote_average!=0 ? (
                         <p>Rating: {Math.round(episode.vote_average*100)/100}</p>
+                        ): null}
                         {episode.runtime&&<h4>Duration: {getDuration(episode.runtime)}</h4>}
                     </div>
                 </div>
