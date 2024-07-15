@@ -42,6 +42,25 @@
     margin-left: 30px;
     z-index: 1;
 }
+#details .intro .description .style-button-container{
+    display: flex;
+    flex-wrap: wrap;
+    gap: 5px;
+    margin: 5px 10px;
+}
+#details .intro .description .style-button {
+    padding: 5px 10px;
+    border: none;
+    border-radius: 5px;
+    background-color: #f1f1f1;
+    color: #333;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+#details .intro .description .style-button:hover {
+    background-color: #ff4b4b;
+    color: #ffffff;
+}
 #details .intro .poster-container {
     max-width: 330px;
     min-width: 200px;

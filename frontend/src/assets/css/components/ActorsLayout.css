@@ -1,8 +1,3 @@
-#actors-layout .content{
-    display: flex;
-    flex-wrap: wrap;
-}
-
 #actors-layout .actors{
     display: flex;
     overflow-x: auto; /* Enable horizontal scrolling */

@@ -78,22 +78,22 @@ export default function Details() {
               <p>Rating: {Math.round(element.vote_average*100)/100}</p>
             ): null}
             <h4>Genres:</h4>
-            <ul>
+            <div className='style-button-container'>
               {element.genres?.map((genre, index) => (
-                <li key={index}>{genre.name}</li>
+                <button key={index} className='style-button'>{genre.name}</button>
               ))}
-            </ul>
+            </div>
             <h4>Original Language:</h4>
             <p>{element.original_language ? element.original_language.toUpperCase() : 'N/A'}</p>
             {element.created_by && element.created_by.length > 0 &&
             (
               <div>
                 <h4>Created by:</h4>
-                <ul>
+                <div className='style-button-container'>
                   {element.created_by.map((person, index) => (
-                    <li key={index}>{person.name}</li>
+                    <button key={index} className='style-button'>{person.name}</button>
                   ))}
-                </ul>
+                </div>
               </div>
             )}
           </div>
