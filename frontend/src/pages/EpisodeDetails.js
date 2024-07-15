@@ -48,7 +48,8 @@ export default function EpisodeDetails() {
                         <h3><FaArrowLeft />Back to the show's page</h3>
                     </Link>
                 </div>
-                <div className='intro'>
+                <div className='intro' style={{'--bg-image': `url(${episode.still_path})`}}>
+                    <div className='overlay'/>
                     <div className='img-container'>
                         <img
                             src={episode.still_path}
@@ -66,6 +67,7 @@ export default function EpisodeDetails() {
                 <DragSeason
                     url={"http://127.0.0.1:5252/api/TmdbData/seasonsDetails"}
                     queryParams={`id=${id}&Language=${language}`}
+                    season={season_number}
                 />
             </div>
         </div>

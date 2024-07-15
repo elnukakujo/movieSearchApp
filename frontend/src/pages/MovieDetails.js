@@ -87,8 +87,7 @@ export default function Details() {
             </ul>
             <h4>Original Language:</h4>
             <p>{element.original_language ? element.original_language.toUpperCase() : 'N/A'}</p>
-            {element.created_by &&
-            element.created_by!==null &&
+            {element.created_by && element.created_by.length > 0 &&
             (
               <div>
                 <h4>Created by:</h4>

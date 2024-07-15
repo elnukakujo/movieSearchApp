@@ -3,13 +3,14 @@ import { Link, useParams } from "react-router-dom";
 import ToggleButton from "./ToggleButton";
 import "../assets/css/components/dragSeason.css";
 
-export default function DragSeason({ url, queryParams, toggleButton }) {
+export default function DragSeason({ url, queryParams, toggleButton, season }) {
   const { id } = useParams();
   const [episodes, setEpisodes] = useState([]);
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
-  const [selectedSeason, setSelectedSeason] = useState("1");
+  const initialSeason = season || "1";
+  const [selectedSeason, setSelectedSeason] = useState(initialSeason);
   const episodesRef = useRef(null);
 
   // Fetch episodes when selectedSeason or URL/QueryParams change
