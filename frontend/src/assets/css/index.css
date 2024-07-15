@@ -1,8 +1,21 @@
+@font-face {
+    font-family: 'Poppins-Regular';
+    src: url('../font/Poppins-Regular.ttf');
+}
+@font-face {
+    font-family: 'Nunito-Light';
+    src: url('../font/Nunito-Light.ttf');
+}
 body{
     margin: 0px;
     background-color: #f4f4f4;
     color: #333333;
 }
-h1, h2, h3, h4, h5, h6, p{
+h1, h2, h3, h4, h5, h6{
     margin: 0px;
+    font-family: Poppins-Regular;
+}
+p{
+    margin: 0px;
+    font-family: Nunito-Light;
 }
