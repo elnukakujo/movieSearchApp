@@ -67,7 +67,6 @@ export default function Details() {
           <div className='description'>
             <h1>{element.title || element.name}</h1>
             {element.adult && <h4>Adult Content</h4>}
-            <h4>Status: {element.status}</h4>
             {element.runtime && element.runtime !== 0 ? (
               <p>Duration: {getDuration(element.runtime)}</p>
             ) : null}

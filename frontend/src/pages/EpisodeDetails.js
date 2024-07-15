@@ -3,6 +3,7 @@ import { useParams, useLocation, Link } from 'react-router-dom';
 import DragSeason from '../components/DragSeason';
 import '../assets/css/pages/EpisodeDetails.css';
 import { FaArrowLeft } from 'react-icons/fa';
+import DragPosters from '../components/DragPosters';
 
 export default function EpisodeDetails() {
     const { id, season_number, episode_number } = useParams();
@@ -70,6 +71,11 @@ export default function EpisodeDetails() {
                     url={"http://127.0.0.1:5252/api/TmdbData/seasonsDetails"}
                     queryParams={`id=${id}&Language=${language}`}
                     season={season_number}
+                />
+                <DragPosters
+                    url={'http://127.0.0.1:5252/api/TmdbData/recommendation'}
+                    title="Recommendations"
+                    queryParams={`MediaType=tv&id=${id}&Language=${language}`}
                 />
             </div>
         </div>
