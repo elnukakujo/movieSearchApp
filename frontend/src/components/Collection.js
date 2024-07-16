@@ -24,6 +24,8 @@ export default function Collection({ id, collectionId, language }){
     }, [id, collectionId, language]);
 
     const handleMouseDown = (event) => {
+        if(event.target.tagName==="A") return;
+        if(event.target.tagName==="IMG") return;
         setIsClick(true); // Assume it is a click until it moves
         setIsDragging(true);
         if (collectionRef.current) {

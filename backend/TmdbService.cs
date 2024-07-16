@@ -329,6 +329,7 @@ namespace backend
                                 tvCastObject["poster_path"] = $"https://image.tmdb.org/t/p/w500{posterPath}";
                             }
                         }
+                        tvCastObject["media_type"] = "tv";
                     }
                     // Create a new JsonObject instance for tvCastNode
                     var newTvCastNode = new JsonObject();
@@ -378,6 +379,7 @@ namespace backend
                                 movieCastObject["poster_path"] = $"https://image.tmdb.org/t/p/w500{posterPath}";
                             }
                         }
+                        movieCastObject["media_type"] = "movie";
                     }
                     // Create a new JsonObject instance for movieCastNode
                     var newMovieCastNode = new JsonObject();

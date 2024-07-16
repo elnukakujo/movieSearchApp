@@ -45,12 +45,13 @@ export default function DragSeason({ url, queryParams, toggleButton, season }) {
 
   // Handle mouse events for dragging functionality
   const handleMouseDown = (event) => {
-      setIsClick(true); // Assume it is a click until it moves
-      setIsDragging(true);
-      if (episodesRef.current) {
-          setStartX(event.clientX - episodesRef.current.offsetLeft);
-          setScrollLeft(episodesRef.current.scrollLeft);
-      }
+    if(event.target.tagName==="A") return;
+    setIsClick(true); // Assume it is a click until it moves
+    setIsDragging(true);
+    if (episodesRef.current) {
+        setStartX(event.clientX - episodesRef.current.offsetLeft);
+        setScrollLeft(episodesRef.current.scrollLeft);
+    }
   };
 
   const handleMouseMove = (event) => {
