@@ -281,5 +281,123 @@ namespace backend
             }
             return collection;
         }
+        public async Task<JsonNode> GetPersonDetailsAsync([FromQuery] int id, [FromQuery] string Language)
+        {
+            var options = new RestClientOptions(
+                $"https://api.themoviedb.org/3/person/{id}?api_key={_apiKey}&language={Language}"
+            );
+            var client = new RestClient(options);
+            var request = new RestRequest("");
+            var response = await client.GetAsync(request);
+            var person = JsonNode.Parse(response.Content)?.AsObject();
+    
+            if (person != null)
+            {
+                if(person["profile_path"]!=null)
+                {
+                    person["profile_path"] = $"https://image.tmdb.org/t/p/w500{person["profile_path"]}";
+                }
+            }
+            var tvCreditsOptions = new RestClientOptions(
+                $"https://api.themoviedb.org/3/person/{id}/tv_credits?api_key={_apiKey}&language={Language}"
+            );
+            var tvCreditsClient = new RestClient(tvCreditsOptions);
+            var tvCreditsRequest = new RestRequest("");
+            var tvCreditsResponse = await tvCreditsClient.GetAsync(tvCreditsRequest);
+            var tvCredits = JsonNode.Parse(tvCreditsResponse.Content)?.AsObject();
+
+            if (tvCredits != null && tvCredits.ContainsKey("cast") && tvCredits["cast"] is JsonArray tvCast)
+            {
+                var tvCastArray = new JsonArray();
+                foreach (JsonNode tvCastNode in tvCast)
+                {
+                    if (tvCastNode is JsonObject tvCastObject)
+                    {
+                        if(tvCastObject.ContainsKey("backdrop_path"))
+                        {
+                            var backdropPath = tvCastObject["backdrop_path"]?.ToString();
+                            if (!string.IsNullOrEmpty(backdropPath))
+                            {
+                                tvCastObject["backdrop_path"] = $"https://image.tmdb.org/t/p/w500{backdropPath}";
+                            }
+                        }
+                        if(tvCastObject.ContainsKey("poster_path"))
+                        {
+                            var posterPath = tvCastObject["poster_path"]?.ToString();
+                            if (!string.IsNullOrEmpty(posterPath))
+                            {
+                                tvCastObject["poster_path"] = $"https://image.tmdb.org/t/p/w500{posterPath}";
+                            }
+                        }
+                    }
+                    // Create a new JsonObject instance for tvCastNode
+                    var newTvCastNode = new JsonObject();
+                    foreach (var property in tvCastNode?.AsObject() ?? Enumerable.Empty<KeyValuePair<string, JsonNode>>())
+                    {
+                        if (property.Value != null)
+                        {
+                            newTvCastNode[property.Key] = property.Value.DeepClone(); // Clone the property value if it's not null
+                        }
+                        else
+                        {
+                            newTvCastNode[property.Key] = null; // Set the property value to null if it's null
+                        }
+                    }
+                    tvCastArray.Add(newTvCastNode);
+                }
+                person["tv_cast"] = tvCastArray;
+            }
+
+            var movieCreditsOptions = new RestClientOptions(
+                $"https://api.themoviedb.org/3/person/{id}/movie_credits?api_key={_apiKey}&language={Language}"
+            );
+            var movieCreditsClient = new RestClient(movieCreditsOptions);
+            var movieCreditsRequest = new RestRequest("");
+            var movieCreditsResponse = await movieCreditsClient.GetAsync(movieCreditsRequest);
+            var movieCredits = JsonNode.Parse(movieCreditsResponse.Content)?.AsObject();
+            if (movieCredits != null && movieCredits.ContainsKey("cast") && movieCredits["cast"] is JsonArray movieCast)
+            {
+                var movieCastArray = new JsonArray();
+                foreach (JsonNode movieCastNode in movieCast)
+                {
+                    if (movieCastNode is JsonObject movieCastObject)
+                    {
+                        if(movieCastObject.ContainsKey("backdrop_path"))
+                        {
+                            var backdropPath = movieCastObject["backdrop_path"]?.ToString();
+                            if (!string.IsNullOrEmpty(backdropPath))
+                            {
+                                movieCastObject["backdrop_path"] = $"https://image.tmdb.org/t/p/w500{backdropPath}";
+                            }
+                        }
+                        if(movieCastObject.ContainsKey("poster_path"))
+                        {
+                            var posterPath = movieCastObject["poster_path"]?.ToString();
+                            if (!string.IsNullOrEmpty(posterPath))
+                            {
+                                movieCastObject["poster_path"] = $"https://image.tmdb.org/t/p/w500{posterPath}";
+                            }
+                        }
+                    }
+                    // Create a new JsonObject instance for movieCastNode
+                    var newMovieCastNode = new JsonObject();
+                    foreach (var property in movieCastNode?.AsObject() ?? Enumerable.Empty<KeyValuePair<string, JsonNode>>())
+                    {
+                        if (property.Value != null)
+                        {
+                            newMovieCastNode[property.Key] = property.Value.DeepClone(); // Clone the property value if it's not null
+                        }
+                        else
+                        {
+                            newMovieCastNode[property.Key] = null; // Set the property value to null if it's null
+                        }
+                    }
+                    movieCastArray.Add(newMovieCastNode);
+                }
+                person["movie_cast"] = movieCastArray;
+            }
+
+            return person;
+        }
     }
 }

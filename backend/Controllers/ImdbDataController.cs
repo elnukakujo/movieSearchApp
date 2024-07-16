@@ -70,5 +70,11 @@ namespace backend.Controllers
             var episodeResults = await _tmdbService.GetCollectionDetailsAsync(id, Language);
             return Ok(episodeResults);
         }
+        [HttpGet("person")]
+        public async Task<IActionResult> GetPersonDetails([FromQuery] int id, [FromQuery] string Language)
+        {
+            var personResults = await _tmdbService.GetPersonDetailsAsync(id, Language);
+            return Ok(personResults);
+        }
     }
 }
