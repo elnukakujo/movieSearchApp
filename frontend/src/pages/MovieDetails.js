@@ -4,6 +4,7 @@ import '../assets/css/pages/movieDetails.css';
 import DragPosters from '../components/DragPosters';
 import DragSeason from '../components/DragSeason';
 import ActorsLayout from '../components/ActorsLayout';
+import Collecion from '../components/Collection';
 
 export default function Details() {
   const { media_type, id } = useParams(); // Get movie_id from route parameter
@@ -29,10 +30,8 @@ export default function Details() {
         console.error('Error fetching movies:', error);
       }
     };
-
-    fetchMovies(); // Initial fetch
-    const interval = setInterval(fetchMovies, 500); // Fetch every 5 seconds
-    return () => clearInterval(interval); // Cleanup interval on component unmount
+  
+    fetchMovies();
   }, [media_type, id, language]);
 
   function getDuration(runtime) {
@@ -97,6 +96,13 @@ export default function Details() {
             )}
           </div>
         </div>
+        {element.belongs_to_collection &&(
+          <Collecion 
+            id={id}
+            collectionId={element.belongs_to_collection.id}
+            language={language}
+          />
+        )}
         {media_type === 'tv' && element.seasons && element.seasons.length > 0 && (
           <DragSeason
             url={"http://127.0.0.1:5252/api/TmdbData/seasonsDetails"}

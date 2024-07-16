@@ -253,5 +253,33 @@ namespace backend
             }
             return results;
         }
+        public async Task<JsonNode> GetCollectionDetailsAsync([FromQuery] int id, [FromQuery] string Language)
+        {
+            var options = new RestClientOptions(
+                $"https://api.themoviedb.org/3/collection/{id}?api_key={_apiKey}&language={Language}"
+            );
+            var client = new RestClient(options);
+            var request = new RestRequest("");
+            var response = await client.GetAsync(request);
+            var collection = JsonNode.Parse(response.Content)?.AsObject();
+    
+            if (collection != null)
+            {
+                if(collection["poster_path"]!=null)
+                {
+                    collection["poster_path"] = $"https://image.tmdb.org/t/p/w500{collection["poster_path"]}";
+                }
+                if(collection["backdrop_path"]!=null)
+                {
+                    collection["backdrop_path"] = $"https://image.tmdb.org/t/p/w500{collection["backdrop_path"]}";
+                }
+                foreach (var part in collection["parts"].AsArray())
+                {
+                    part["poster_path"] = $"https://image.tmdb.org/t/p/w500{part["poster_path"]}";
+                    part["backdrop_path"] = $"https://image.tmdb.org/t/p/w500{part["backdrop_path"]}";
+                }
+            }
+            return collection;
+        }
     }
 }

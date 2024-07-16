@@ -11,6 +11,7 @@ export default function DragSeason({ url, queryParams, toggleButton, season }) {
   const [scrollLeft, setScrollLeft] = useState(0);
   const initialSeason = season || "1";
   const [selectedSeason, setSelectedSeason] = useState(initialSeason);
+  const [isClick, setIsClick] = useState(false);
   const episodesRef = useRef(null);
 
   // Fetch episodes when selectedSeason or URL/QueryParams change
@@ -44,27 +45,29 @@ export default function DragSeason({ url, queryParams, toggleButton, season }) {
 
   // Handle mouse events for dragging functionality
   const handleMouseDown = (event) => {
-    if (event.target.tagName.toLowerCase() === 'a') {
-      event.preventDefault(); // Prevent default behavior if clicking on a link
-    }
-    setIsDragging(true);
-    if (episodesRef.current) {
-      setStartX(event.clientX - episodesRef.current.offsetLeft);
-      setScrollLeft(episodesRef.current.scrollLeft);
-    }
+      setIsClick(true); // Assume it is a click until it moves
+      setIsDragging(true);
+      if (episodesRef.current) {
+          setStartX(event.clientX - episodesRef.current.offsetLeft);
+          setScrollLeft(episodesRef.current.scrollLeft);
+      }
   };
 
   const handleMouseMove = (event) => {
-    if (!isDragging) return;
-    if (episodesRef.current) {
-      const x = event.clientX - episodesRef.current.offsetLeft;
-      const walk = (x - startX) * 2; // Adjust the multiplier for faster scrolling if needed
-      episodesRef.current.scrollLeft = scrollLeft - walk;
-    }
+      if (!isDragging) return;
+      setIsClick(false); // Not a click if it moves
+      if (episodesRef.current) {
+          const x = event.clientX - episodesRef.current.offsetLeft;
+          const walk = (x - startX) * 2; // Adjust the multiplier for faster scrolling
+          episodesRef.current.scrollLeft = scrollLeft - walk;
+      }
   };
 
-  const handleMouseUp = () => {
-    setIsDragging(false);
+  const handleMouseUp = (event) => {
+      setIsDragging(false);
+      if (!isClick) {
+          event.preventDefault();
+      }
   };
 
   const handleMouseLeave = () => {
