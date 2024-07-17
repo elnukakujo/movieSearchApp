@@ -5,6 +5,7 @@ import DragPosters from '../components/DragPosters';
 import DragSeason from '../components/DragSeason';
 import ActorsLayout from '../components/ActorsLayout';
 import Collecion from '../components/Collection';
+import Reviews from '../components/Reviews';
 
 export default function Details() {
   const { media_type, id } = useParams(); // Get movie_id from route parameter
@@ -12,7 +13,6 @@ export default function Details() {
   const queryParams = new URLSearchParams(search);
   const language = queryParams.get('language') || 'en'; // Default to 'en' if language not specified
   const [element, setElement] = useState({});
-  const dateStr = element.release_date || element.first_air_date;
 
   useEffect(() => {
     const fetchMovies = async () => {
@@ -47,10 +47,6 @@ export default function Details() {
   const backdropUrl = element.backdrop_path;
   const isValidBackdrop = backdropUrl && backdropUrl !== "https://image.tmdb.org/t/p/w500" && backdropUrl !== "https://image.tmdb.org/t/p/w780";
 
-  const introStyle = isValidBackdrop
-    ? { backgroundImage: `url(${backdropUrl})` }
-    : {};
-
   return (
     <div className="section" id="details">
       <div className="content" >
@@ -72,8 +68,8 @@ export default function Details() {
             <h4>Release Date: {element.release_date || element.first_air_date}</h4>
             <h3>{element.tagline}</h3>
             <p>{element.overview}</p>
-            {element.vote_average!=0 ? (
-              <p>Rating: {Math.round(element.vote_average*100)/100}</p>
+            {element.vote_average!==0 ? (
+              <p>Rating: {Math.round(element.vote_average*5)/10} /5</p>
             ): null}
             <h4>Genres:</h4>
             <div className='style-button-container'>
@@ -112,6 +108,11 @@ export default function Details() {
         )}
         <ActorsLayout
           actors={element.cast}
+        />
+        <Reviews
+          mediatype={media_type}
+          id={id}
+          language={language}
         />
         <DragPosters
             url={'http://127.0.0.1:5252/api/TmdbData/recommendation'}

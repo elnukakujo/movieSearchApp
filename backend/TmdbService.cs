@@ -3,6 +3,7 @@ using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.RazorPages;
 using RestSharp;
 
 namespace backend
@@ -400,6 +401,42 @@ namespace backend
             }
 
             return person;
+        }
+        public async Task<JsonNode> GetReviewsAsync([FromQuery] string MediaType, [FromQuery] int id, [FromQuery] string Language)
+        {
+            var options = new RestClientOptions(
+                $"https://api.themoviedb.org/3/{MediaType}/{id}/reviews?api_key={_apiKey}&language={Language}"
+            );
+            var client = new RestClient(options);
+            var request = new RestRequest("");
+            var response = await client.GetAsync(request);
+            var contentNode = JsonNode.Parse(response.Content);
+            int totalPages;
+            int currentPage;
+            
+            if (int.TryParse(contentNode["total_pages"]?.ToString(), out totalPages) && int.TryParse(contentNode["page"]?.ToString(), out currentPage))
+            {
+                if (totalPages > currentPage)
+                {
+                    for (var page = 2; page <= totalPages; page++)
+                    {
+                        request = new RestRequest($"&page={page}");
+                        var newResponse = await client.GetAsync(request);
+                        
+                        // Parse the new response content and merge results
+                        var newContentNode = JsonNode.Parse(newResponse.Content);
+                        var newResults = newContentNode["results"].AsArray();
+                        var originalResults = contentNode["results"].AsArray();
+                        foreach (var result in newResults)
+                        {
+                            originalResults.Add(result);
+                        }
+                    }
+                }
+            }
+            
+            var reviews = contentNode["results"].AsArray();
+            return reviews;
         }
     }
 }

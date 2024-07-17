@@ -12,29 +12,28 @@ export default function EpisodeDetails() {
     const language = queryParams.get('language') || 'en';
     const [episode, setEpisode]=useState({});
 
-    const fetchEpisode = async () => {
-        const url = `http://127.0.0.1:5252/api/TmdbData/episodeDetails?id=${id}&season_number=${season_number}&episode_number=${episode_number}&Language=${language}`;
-        try {
-            const response = await fetch(url);
-            if (!response.ok) {
-                throw new Error('Network response was not ok');
+    useEffect((language) => {
+        const fetchEpisode = async () => {
+            const url = `http://127.0.0.1:5252/api/TmdbData/episodeDetails?id=${id}&season_number=${season_number}&episode_number=${episode_number}&Language=${language}`;
+            try {
+                const response = await fetch(url);
+                if (!response.ok) {
+                    throw new Error('Network response was not ok');
+                }
+                const data = await response.json();
+                setEpisode(data);
+            } catch (error) {
+                console.error('Error fetching episode:', error);
+                setEpisode({});
             }
-            const data = await response.json();
-            setEpisode(data);
-        } catch (error) {
-            console.error('Error fetching episode:', error);
-            setEpisode({});
         }
-    }
-
-    useEffect(() => {
         fetchEpisode();
-      }, [id, season_number, episode_number]);
+    }, [id, season_number, episode_number]);
 
     function getDuration(runtime) {
         if(runtime>60){
             let min = (runtime%60).toString()
-            if(min.length==1) min = "0"+min;
+            if(min.length===1) min = "0"+min;
             return (Math.floor(runtime/60)).toString()+"h"+min;
         }else{
             return episode.runtime.toString()+"min"
@@ -54,6 +53,7 @@ export default function EpisodeDetails() {
                     <div className='img-container'>
                         <img
                             src={episode.still_path}
+                            alt={episode.name}
                         />
                     </div>
                     <div className='description'>
@@ -61,8 +61,8 @@ export default function EpisodeDetails() {
                         <h2>{episode.name}</h2>
                         <h4>Release Date: {episode.air_date}</h4>
                         <p>{episode.overview}</p>
-                        {episode.vote_average!=0 ? (
-                        <p>Rating: {Math.round(episode.vote_average*100)/100}</p>
+                        {episode.vote_average!==0 ? (
+                        <p>Rating: {Math.round(episode.vote_average*5)/10} /5</p>
                         ): null}
                         {episode.runtime&&<h4>Duration: {getDuration(episode.runtime)}</h4>}
                     </div>

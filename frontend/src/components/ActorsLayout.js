@@ -47,7 +47,7 @@ export default function ActorsLayout({actors}) {
     return (
         <div className="section" id="actors-layout">
             <div className="content">
-                <h3>Actors</h3>
+                <h2>Actors</h2>
                 <div
                     ref={actorsRef}
                     className={`actors ${isDragging ? 'dragging' : ''}`}
@@ -70,8 +70,10 @@ export default function ActorsLayout({actors}) {
                                     draggable="false"
                                 />
                             </div>
-                            <h4>{actor.name}</h4>
-                            <p>{actor.character}</p>
+                            <div className='description'>
+                                <h4>{actor.name}</h4>
+                                <p>{actor.character}</p>
+                            </div>
                         </Link>
                     ))}
                 </div>

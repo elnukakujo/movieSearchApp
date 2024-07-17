@@ -25,8 +25,7 @@ export default function Collection({ id, collectionId, language }){
 
     const handleMouseDown = (event) => {
         if(event.target.tagName==="A") return;
-        if(event.target.tagName==="IMG") return;
-        setIsClick(true); // Assume it is a click until it moves
+        setIsClick(false);
         setIsDragging(true);
         if (collectionRef.current) {
             setStartX(event.clientX - collectionRef.current.offsetLeft);
@@ -36,7 +35,7 @@ export default function Collection({ id, collectionId, language }){
     
     const handleMouseMove = (event) => {
         if (!isDragging) return;
-        setIsClick(false); // Not a click if it moves
+        setIsClick(false); 
         if (collectionRef.current) {
             const x = event.clientX - collectionRef.current.offsetLeft;
             const walk = (x - startX) * 2; // Adjust the multiplier for faster scrolling
@@ -91,7 +90,7 @@ export default function Collection({ id, collectionId, language }){
                                 <p>{element.overview}</p>
                                 <p>Release Date: {element.release_date}</p>
                                 {element.vote_average!=0 ? (
-                                    <p>Rating: {Math.round(element.vote_average*100)/100}</p>
+                                    <p>Rating: {Math.round(element.vote_average*5)/10} /5</p>
                                 ): null}
                             </div>
                         </Link>

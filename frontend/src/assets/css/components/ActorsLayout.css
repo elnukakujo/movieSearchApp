@@ -18,6 +18,12 @@
 #actors-layout .actors .actor {
     margin-right: 20px;
 }
+#actors-layout .actors .actor:hover {
+    transform: none;
+}
+#actors-layout .actors .actor .description {
+    max-width: 180px;
+}
 #actors-layout .actors .profile-container {
     width: 150px;
     height: 150px;

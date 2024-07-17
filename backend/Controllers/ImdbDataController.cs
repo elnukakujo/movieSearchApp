@@ -76,5 +76,11 @@ namespace backend.Controllers
             var personResults = await _tmdbService.GetPersonDetailsAsync(id, Language);
             return Ok(personResults);
         }
+        [HttpGet("reviews")]
+        public async Task<IActionResult> GetReviews([FromQuery] string MediaType, [FromQuery] int id, [FromQuery] string Language)
+        {
+            var reviewResults = await _tmdbService.GetReviewsAsync(MediaType, id, Language);
+            return Ok(reviewResults);
+        }
     }
 }
