@@ -1,9 +1,10 @@
 .toggle-button-container{
     display: flex;
-    justify-content: space-between;
+    flex-wrap: wrap;
     width: 100%;
 }
 .toggle-button{
+    flex: 0 1 auto;
     background-color: #f1f1f1;
     border: none;
     color: black;
@@ -11,10 +12,9 @@
     text-align: center;
     text-decoration: none;
     font-size: 16px;
-    margin: 4px 2px;
+    margin: 4px;
     cursor: pointer;
     border-radius: 16px;
-    width: 100%;
     transition: 0.3s;
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
@@ -27,4 +27,12 @@
 
 .selected{
     background-color: #ff4b4b;
+}
+.toggle-button.disable {
+    opacity: 0.5; /* Adjust the opacity as needed */
+    cursor: not-allowed; 
+}
+.toggle-button.disable:hover{
+    filter:none;
+    transform: none;
 }

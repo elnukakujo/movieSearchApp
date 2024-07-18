@@ -5,6 +5,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.RazorPages;
 using RestSharp;
+using System.Linq;
 
 namespace backend
 {
@@ -225,6 +226,7 @@ namespace backend
             var request = new RestRequest("");
             var response = await client.GetAsync(request);
             var episode = JsonNode.Parse(response.Content)?.AsObject();
+            var seasonDetails = await GetSeasonsDetailsAsync(id, season_number, Language);
     
             if (episode != null && episode.ContainsKey("still_path"))
             {
@@ -232,7 +234,13 @@ namespace backend
                 if (!string.IsNullOrEmpty(stillPath))
                 {
                     episode["still_path"] = $"https://image.tmdb.org/t/p/w500{stillPath}";
+                } else {
+                    episode["still_path"]=null;
                 }
+            }
+            if(episode != null && seasonDetails != null && seasonDetails is JsonArray episodes && episodes.Count > 0){
+                JsonNode lastElement = episodes.Last();
+                episode["episodes_count"] = lastElement["episode_number"]?.DeepClone();
             }
 
             return episode;

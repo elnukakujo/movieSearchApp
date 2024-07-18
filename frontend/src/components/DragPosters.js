@@ -16,9 +16,10 @@ export default function DragPosters({ url, title, queryParams, toggleButton = []
     let fullUrl = new URL(url);
     fullUrl.search = new URLSearchParams(queryParams).toString();
     if (toggleButton.length > 0 && mode) {
-      fullUrl.searchParams.append('SelectedMode', mode);
+      fullUrl.searchParams.append('SelectedMode', mode.toLowerCase());
     }
     try {
+      console.log(fullUrl); // Log the URL to check correctness
       const response = await fetch(fullUrl);
       if (!response.ok) {
         throw new Error('Network response was not ok');
@@ -78,9 +79,22 @@ export default function DragPosters({ url, title, queryParams, toggleButton = []
     fetchMovies(mode); // Fetch movies immediately when mode changes
   };
 
+  const scrollBy = (direction) => {
+    if (moviesRef.current) {
+      const itemWidth = moviesRef.current.querySelector('.poster-container').offsetWidth;
+      moviesRef.current.scrollLeft += direction * itemWidth;
+    }
+  };
+
   if (movies.length === 0) {
     return null; // Return null if movies array is empty
   }
+
+  const uniquePosters = Array.from(new Set(movies.map(m => m.id)))
+    .map(id => {
+      return movies.find(m => m.id === id);
+    }
+  );
 
   return (
     <div className="section" id="dragPosters">
@@ -101,7 +115,7 @@ export default function DragPosters({ url, title, queryParams, toggleButton = []
           onMouseUp={handleMouseUp}
           onMouseLeave={handleMouseLeave}
         >
-          {movies.map((element) => (
+          {uniquePosters.map((element) => (
             element.poster_path && element.poster_path!=="https://image.tmdb.org/t/p/w500" && (
               <Link
                 key={element.id}

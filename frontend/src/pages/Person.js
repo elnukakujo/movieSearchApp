@@ -24,7 +24,7 @@ export default function Person() {
                 <div className="intro">
                     <div className="description">
                         <h2>{person.name}</h2>
-                        {person.also_known_as && (
+                        {person.also_known_as && person.also_known_as.length>0 ? (
                         <>
                             <h4>Also known as:</h4>
                             <div className='style-button-container'>
@@ -33,7 +33,7 @@ export default function Person() {
                                 ))}
                             </div>
                         </>
-                        )}
+                        ):null}
                         <h4>Born in {person.place_of_birth} the {person.birthday}</h4>
                         {person.deathday && <h4>Died the {person.deathday}</h4>}
                         <p>Best known for his {person.known_for_department && person.known_for_department.toLowerCase()}</p>

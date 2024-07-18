@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import { useParams, useLocation, Link } from 'react-router-dom';
+import { useParams, useLocation, Link, useNavigate } from 'react-router-dom';
 import DragSeason from '../components/DragSeason';
 import '../assets/css/pages/EpisodeDetails.css';
 import { FaArrowLeft } from 'react-icons/fa';
 import DragPosters from '../components/DragPosters';
+import ToggleButton from '../components/ToggleButton';
 
 export default function EpisodeDetails() {
     const { id, season_number, episode_number } = useParams();
@@ -12,21 +13,22 @@ export default function EpisodeDetails() {
     const language = queryParams.get('language') || 'en';
     const [episode, setEpisode]=useState({});
 
-    useEffect((language) => {
-        const fetchEpisode = async () => {
-            const url = `http://127.0.0.1:5252/api/TmdbData/episodeDetails?id=${id}&season_number=${season_number}&episode_number=${episode_number}&Language=${language}`;
-            try {
-                const response = await fetch(url);
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                const data = await response.json();
-                setEpisode(data);
-            } catch (error) {
-                console.error('Error fetching episode:', error);
-                setEpisode({});
+    const fetchEpisode = async () => {
+        const url = `http://127.0.0.1:5252/api/TmdbData/episodeDetails?id=${id}&season_number=${season_number}&episode_number=${episode_number}&Language=${language}`;
+        try {
+            const response = await fetch(url);
+            if (!response.ok) {
+                throw new Error('Network response was not ok');
             }
+            const data = await response.json();
+            setEpisode(data);
+        } catch (error) {
+            console.error('Error fetching episode:', error);
+            setEpisode({});
         }
+    };
+
+    useEffect((language) => {
         fetchEpisode();
     }, [id, season_number, episode_number]);
 
@@ -38,6 +40,14 @@ export default function EpisodeDetails() {
         }else{
             return episode.runtime.toString()+"min"
         }
+    }
+    const navigate = useNavigate();
+    const handleEpisodeChange=(mode)=>{
+        const nextEpisode = mode === 'Next' ? parseInt(episode_number) + 1 : parseInt(episode_number) - 1;
+        if (nextEpisode>parseInt(episode.episodes_count)||nextEpisode<1) return;
+        const newPath = `/tv/${id}/${season_number}/${nextEpisode}?language=en`;
+        console.log('Navigating to:', newPath); // Log the path to check correctness
+        navigate(newPath, { replace: true });
     }
 
     return (
@@ -53,7 +63,7 @@ export default function EpisodeDetails() {
                     <div className='img-container'>
                         <img
                             src={episode.still_path}
-                            alt={episode.name}
+                            alt={""}
                         />
                     </div>
                     <div className='description'>
@@ -67,10 +77,19 @@ export default function EpisodeDetails() {
                         {episode.runtime&&<h4>Duration: {getDuration(episode.runtime)}</h4>}
                     </div>
                 </div>
+                <ToggleButton
+                    modes={['Previous', 'Next']}
+                    onModeChange={handleEpisodeChange}
+                    classes={[
+                        parseInt(episode_number) - 1<1?"disable":"",
+                        parseInt(episode_number) + 1>parseInt(episode.episodes_count)?"disable":""
+                    ]}
+                />
                 <DragSeason
                     url={"http://127.0.0.1:5252/api/TmdbData/seasonsDetails"}
                     queryParams={`id=${id}&Language=${language}`}
                     season={season_number}
+                    currentEpisode={episode_number}
                 />
                 <DragPosters
                     url={'http://127.0.0.1:5252/api/TmdbData/recommendation'}

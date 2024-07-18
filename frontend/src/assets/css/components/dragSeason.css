@@ -1,7 +1,6 @@
 #dragSeason .episodes{
     display: flex;
     overflow-x: auto; /* Enable horizontal scrolling */
-    scroll-snap-type: x mandatory; /* Enables snapping to each image */
     scroll-behavior: smooth; /* Smooth scrolling */
     padding: 10px;
     cursor: grab;
@@ -23,7 +22,6 @@
     height: 200px;
     overflow: hidden;
     display: inline-block;
-    margin-right: 10px;
     flex: 0 0 auto; /* Prevents shrinking */
     scroll-snap-align: start;
 }
@@ -40,4 +38,15 @@
 
 #dragSeason p{
     margin:5px 0px 0px;
+}
+
+#dragSeason .episode-content {
+    background-color: #f1f1f1;
+    border-radius: 16px;
+    padding: 10px;
+    margin-left:5px
+}
+
+#dragSeason .current .episode-content{
+    background-color: #ff4b4b;
 }

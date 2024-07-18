@@ -13,13 +13,13 @@ export default function Home() {
                 url="http://127.0.0.1:5252/api/TmdbData/trending"
                 title="Trending Now"
                 queryParams='Language=en'
-                toggleButton={['day', 'week']}
+                toggleButton={['Day', 'Week']}
                 />
                 <DragPosters
                 url="http://127.0.0.1:5252/api/TmdbData/top_rated"
                 title="Top Rated"
                 queryParams='Language=en'
-                toggleButton={['movie', 'tv']}
+                toggleButton={['Movie', 'TV']}
                 />
             </div>
         </div>
