@@ -30,3 +30,5 @@ jobs:
         app-name: noeflix
         publish-profile: ${{ secrets.AzureAppService_PublishProfile }}
         package: ${{ github.workspace }}/publish
+      env:
+        TMDB_API_KEY: ${{ secrets.TMDB_API_KEY }}
