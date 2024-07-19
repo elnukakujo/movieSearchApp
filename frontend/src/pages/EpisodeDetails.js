@@ -46,7 +46,6 @@ export default function EpisodeDetails() {
         const nextEpisode = mode === 'Next' ? parseInt(episode_number) + 1 : parseInt(episode_number) - 1;
         if (nextEpisode>parseInt(episode.episodes_count)||nextEpisode<1) return;
         const newPath = `/tv/${id}/${season_number}/${nextEpisode}?language=en`;
-        console.log('Navigating to:', newPath); // Log the path to check correctness
         navigate(newPath, { replace: true });
     }
 

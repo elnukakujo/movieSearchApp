@@ -4,13 +4,22 @@ import ToggleButton from './ToggleButton'; // Import ToggleButton component
 import '../assets/css/components/dragPosters.css'; // Ensure correct path to CSS file
 
 export default function DragPosters({ url, title, queryParams, toggleButton = [], posters }) {
-  const [movies, setMovies] = useState([]||posters);
+  const [movies, setMovies] = useState(posters || []);
   const [isDragging, setIsDragging] = useState(false);
   const [startX, setStartX] = useState(0);
   const [scrollLeft, setScrollLeft] = useState(0);
   const [selectedMode, setSelectedMode] = useState(toggleButton[0] || ''); // Default to empty string if toggleButton[0] is not available
   const [isClick, setIsClick] = useState(false);
+  const [isLeftDisabled, setIsLeftDisabled] = useState(true);
+  const [isRightDisabled, setIsRightDisabled] = useState(false);
   const moviesRef = useRef(null);
+
+  const checkScrollButtons = () => {
+    if (moviesRef.current) {
+      setIsLeftDisabled(moviesRef.current.scrollLeft <= 200);
+      setIsRightDisabled(moviesRef.current.scrollLeft + moviesRef.current.clientWidth >= moviesRef.current.scrollWidth - 200);
+    }
+  };
 
   const fetchMovies = async (mode) => {
     let fullUrl = new URL(url);
@@ -19,7 +28,6 @@ export default function DragPosters({ url, title, queryParams, toggleButton = []
       fullUrl.searchParams.append('SelectedMode', mode.toLowerCase());
     }
     try {
-      console.log(fullUrl); // Log the URL to check correctness
       const response = await fetch(fullUrl);
       if (!response.ok) {
         throw new Error('Network response was not ok');
@@ -27,29 +35,30 @@ export default function DragPosters({ url, title, queryParams, toggleButton = []
       const data = await response.json();
       setMovies(data);
       if (moviesRef.current) {
-        moviesRef.current.scrollLeft = 0; // Reset scroll position to 0 on fetch if moviesRef is available
+        moviesRef.current.scrollLeft = 0;
+        setTimeout(checkScrollButtons, 300);
       }
     } catch (error) {
       console.error('Error fetching movies:', error);
-      setMovies([]); // Set movies to empty array in case of error
+      setMovies([]);
     }
   };
 
   useEffect(() => {
-    if(!posters){
+    if (!posters) {
       fetchMovies(selectedMode);
     } else {
       setMovies(posters);
     }
-  }, [url, queryParams]); // Fetch movies when URL or queryParams change
+    setTimeout(checkScrollButtons, 300);
+  }, [url, queryParams, selectedMode]); // Fetch movies when URL or queryParams change
 
   const handleMouseDown = (event) => {
-    if(event.target.tagName==="A") return;
-    setIsClick(true); // Assume it is a click until it moves
+    if (event.target.tagName === "A") return;
     setIsDragging(true);
     if (moviesRef.current) {
-        setStartX(event.clientX - moviesRef.current.offsetLeft);
-        setScrollLeft(moviesRef.current.scrollLeft);
+      setStartX(event.clientX - moviesRef.current.offsetLeft);
+      setScrollLeft(moviesRef.current.scrollLeft);
     }
   };
 
@@ -60,14 +69,15 @@ export default function DragPosters({ url, title, queryParams, toggleButton = []
           const x = event.clientX - moviesRef.current.offsetLeft;
           const walk = (x - startX) * 2; // Adjust the multiplier for faster scrolling
           moviesRef.current.scrollLeft = scrollLeft - walk;
+          setTimeout(checkScrollButtons, 300);
       }
   };
 
   const handleMouseUp = (event) => {
-      setIsDragging(false);
-      if (!isClick) {
-          event.preventDefault();
-      }
+    setIsDragging(false);
+    if (!isClick) {
+      event.preventDefault();
+    }
   };
 
   const handleMouseLeave = () => {
@@ -76,13 +86,22 @@ export default function DragPosters({ url, title, queryParams, toggleButton = []
 
   const handleModeChange = (mode) => {
     setSelectedMode(mode);
-    fetchMovies(mode); // Fetch movies immediately when mode changes
   };
 
   const scrollBy = (direction) => {
     if (moviesRef.current) {
-      const itemWidth = moviesRef.current.querySelector('.poster-container').offsetWidth;
-      moviesRef.current.scrollLeft += direction * itemWidth;
+      const scrollAmount = direction * moviesRef.current.clientWidth;
+
+      let newScrollLeft = moviesRef.current.scrollLeft + scrollAmount;
+
+      newScrollLeft = Math.max(0, Math.min(newScrollLeft, moviesRef.current.scrollWidth - moviesRef.current.clientWidth));
+
+      moviesRef.current.scrollTo({
+        left: newScrollLeft,
+        behavior: 'smooth'
+      });
+
+      setTimeout(checkScrollButtons, 300);
     }
   };
 
@@ -93,8 +112,7 @@ export default function DragPosters({ url, title, queryParams, toggleButton = []
   const uniquePosters = Array.from(new Set(movies.map(m => m.id)))
     .map(id => {
       return movies.find(m => m.id === id);
-    }
-  );
+    });
 
   return (
     <div className="section" id="dragPosters">
@@ -107,30 +125,48 @@ export default function DragPosters({ url, title, queryParams, toggleButton = []
             onModeChange={handleModeChange}
           />
         )}
-        <div
-          ref={moviesRef}
-          className={`movies ${isDragging ? 'dragging' : ''}`}
-          onMouseDown={handleMouseDown}
-          onMouseMove={handleMouseMove}
-          onMouseUp={handleMouseUp}
-          onMouseLeave={handleMouseLeave}
-        >
-          {uniquePosters.map((element) => (
-            element.poster_path && element.poster_path!=="https://image.tmdb.org/t/p/w500" && (
-              <Link
-                key={element.id}
-                className="poster-container"
-                to={`/${element.media_type}/${element.id}?language=en`}
-                draggable="false"
-              >
-                <img
-                  src={element.poster_path}
-                  alt={element.title}
+        <div className='scroll-row'>
+          <button
+            className={`scroll-button left ${isLeftDisabled ? 'disabled' : ''}`}
+            onClick={() => scrollBy(-1)}
+            disabled={isLeftDisabled}
+          >
+            <div className='line'/>
+            <div className='line'/>
+          </button>
+          <div
+            ref={moviesRef}
+            className={`movies ${isDragging ? 'dragging' : ''}`}
+            onMouseDown={handleMouseDown}
+            onMouseMove={handleMouseMove}
+            onMouseUp={handleMouseUp}
+            onMouseLeave={handleMouseLeave}
+          >
+            {uniquePosters.map((element) => (
+              element.poster_path && element.poster_path !== "https://image.tmdb.org/t/p/w500" && (
+                <Link
+                  key={element.id}
+                  className="poster-container"
+                  to={`/${element.media_type}/${element.id}?language=en`}
                   draggable="false"
-                />
-              </Link>
-            )
-          ))}
+                >
+                  <img
+                    src={element.poster_path}
+                    alt={element.title}
+                    draggable="false"
+                  />
+                </Link>
+              )
+            ))}
+          </div>
+          <button
+            className={`scroll-button right ${isRightDisabled ? 'disabled' : ''}`}
+            onClick={() => scrollBy(1)}
+            disabled={isRightDisabled}
+          >
+            <div className='line'/>
+            <div className='line'/>
+          </button>
         </div>
       </div>
     </div>
