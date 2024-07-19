@@ -12,7 +12,7 @@ namespace backend
     public class TmdbService
     {
         private readonly HttpClient _httpClient;
-        private readonly string _apiKey = new ApiKey()._apiKey;
+        private readonly string _apiKey = Environment.GetEnvironmentVariable("TMDB_API_KEY");
 
         public TmdbService(HttpClient httpClient)
         {
