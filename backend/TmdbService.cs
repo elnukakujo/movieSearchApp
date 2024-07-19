@@ -12,11 +12,12 @@ namespace backend
     public class TmdbService
     {
         private readonly HttpClient _httpClient;
-        private readonly string _apiKey = Environment.GetEnvironmentVariable("TMDB_API_KEY");
+        private readonly string _apiKey;
 
-        public TmdbService(HttpClient httpClient)
+        public TmdbService(HttpClient httpClient, IConfiguration configuration)
         {
             _httpClient = httpClient;
+            _apiKey = configuration["TMDB_API_KEY"];
         }
         public async Task<JsonArray> GetUpcomingMoviesAsync([FromQuery] string Language, [FromQuery] string Region)
         {
