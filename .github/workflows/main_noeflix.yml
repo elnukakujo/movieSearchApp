@@ -46,5 +46,5 @@ jobs:
       - name: Deploy to Azure Web App via FTPS
         run: |
           zip -r myapp.zip .
-          curl -T myapp.zip --user ${{ secrets.AZURE_FTP_USERNAME }}:${{ secrets.AZURE_FTP_PASSWORD }} ftp://${{ secrets.AZURE_FTP_SERVER }}/site/wwwroot/
+          curl -T myapp.zip --user ${{ secrets.AZURE_FTP_USERNAME }}:${{ secrets.AZURE_FTP_PASSWORD }} ${{ secrets.AZURE_FTP_SERVER }}
           unzip -o myapp.zip -d site/wwwroot/
