@@ -43,8 +43,9 @@ jobs:
       - name: Set up environment variables
         run: echo "TMDB_API_KEY=${{ secrets.TMDB_API_KEY }}" >> $GITHUB_ENV
 
+      - name: Install lftp
+        run: sudo apt-get install -y lftp
+
       - name: Deploy to Azure Web App via FTPS
         run: |
-          zip -r myapp.zip .
-          curl -T myapp.zip --user ${{ secrets.AZURE_FTP_USERNAME }}:${{ secrets.AZURE_FTP_PASSWORD }} ${{ secrets.AZURE_FTP_SERVER }}
-          unzip -o myapp.zip -d site/wwwroot/
+          lftp -u "${{ secrets.AZURE_FTP_USERNAME }},${{ secrets.AZURE_FTP_PASSWORD }}" -e "mirror --reverse --delete --verbose ./myapp ${AZURE_FTP_SERVER}; bye"
