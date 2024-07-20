@@ -42,11 +42,6 @@ jobs:
 
       - name: Set up environment variables
         run: echo "TMDB_API_KEY=${{ secrets.TMDB_API_KEY }}" >> $GITHUB_ENV
-        
-      - name: List directory contents
-        run: |
-          echo "Current Directory: $PWD"
-          ls -R
           
       - name: Install lftp
         run: sudo apt-get install -y lftp
