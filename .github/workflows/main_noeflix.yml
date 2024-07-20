@@ -49,7 +49,7 @@ jobs:
       - name: Debug FTPS Connection
         run: |
           echo "Testing FTPS connection..."
-          lftp -u "noeflix\$noeflix,B0jAvP0tMmQ9CXotZj4oSHHY39ExnA123EqQ3dZ74crzvBXW0uMYWvNTZzdT" -e "open ftps://waws-prod-blu-585.ftp.azurewebsites.windows.net; ls; bye"
+          lftp -u "${{ secrets.AZURE_FTP_USERNAME }},${{ secrets.AZURE_FTP_PASSWORD }}" -e "open ${AZURE_FTP_SERVER}; ls; bye"
 
       - name: Deploy to Azure Web App via FTPS
         run: |
