@@ -53,4 +53,4 @@ jobs:
 
       - name: Deploy to Azure Web App via FTPS
         run: |
-          lftp -u "${{ secrets.AZURE_FTP_USERNAME }},${{ secrets.AZURE_FTP_PASSWORD }}" -e "mirror --reverse --delete --verbose ./backend ${AZURE_FTP_SERVER}; bye"
+          lftp -u "${{ secrets.AZURE_FTP_USERNAME }},${{ secrets.AZURE_FTP_PASSWORD }}" -e "mirror --reverse --delete --verbose ${AZURE_FTP_SERVER}; bye"
