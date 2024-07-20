@@ -54,8 +54,8 @@ jobs:
       - name: Debug FTPS Connection
         run: |
           echo "Testing FTPS connection..."
-          lftp -u "${{ secrets.AZURE_FTP_USERNAME }},${{ secrets.AZURE_FTP_PASSWORD }}" -e "open ${AZURE_FTP_SERVER}; ls; bye"
+          lftp -u "site\\${{ secrets.AZURE_FTP_USERNAME }},${{ secrets.AZURE_FTP_PASSWORD }}" -e "open ${AZURE_FTP_SERVER}; ls; bye"
 
       - name: Deploy to Azure Web App via FTPS
         run: |
-          lftp -u "${{ secrets.AZURE_FTP_USERNAME }},${{ secrets.AZURE_FTP_PASSWORD }}" -e "mirror --reverse --delete --verbose ./ ${AZURE_FTP_SERVER}; bye"
+          lftp -u "site\\${{ secrets.AZURE_FTP_USERNAME }},${{ secrets.AZURE_FTP_PASSWORD }}" -e "mirror --reverse --delete --verbose ./ ${AZURE_FTP_SERVER}; bye"
