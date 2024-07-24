@@ -1,0 +1,50 @@
+# .github/workflows/aws_deploy.yml
+name: Deploy to Elastic Beanstalk
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  deploy:
+    runs-on: ubuntu-22.04
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v3
+
+    - name: Set up .NET
+      uses: actions/setup-dotnet@v3
+      with:
+        dotnet-version: '8.x'
+
+    - name: Install AWS CLI
+      run: |
+        sudo apt-get update
+        sudo apt-get install -y awscli
+
+    - name: Deploy to Elastic Beanstalk
+      env:
+        AWS_ACCESS_KEY_ID: ${{ secrets.AWS_ACCESS_KEY_ID }}
+        AWS_SECRET_ACCESS_KEY: ${{ secrets.AWS_SECRET_ACCESS_KEY }}
+        AWS_REGION: 'us-east-1'
+        TMDB_API_KEY: ${{ secrets.TMDB_API_KEY }}
+      run: |
+        # Create a ZIP file of the application
+        dotnet publish -c Release -o ./publish
+        zip -r app.zip ./publish
+
+        # Upload ZIP file to S3
+        aws s3 cp app.zip s3://noeflix-backend--use1-az4--x-s3/app.zip
+
+        # Create a new application version in Elastic Beanstalk
+        aws elasticbeanstalk create-application-version \
+          --application-name noeflix_backend \
+          --version-label $GITHUB_SHA \
+          --source-bundle S3Bucket="noeflix-backend--use1-az4--x-s3",S3Key="app.zip"
+
+        # Update the Elastic Beanstalk environment to use the new version
+        aws elasticbeanstalk update-environment \
+          --environment-name Noeflixbackend-env \
+          --version-label $GITHUB_SHA
