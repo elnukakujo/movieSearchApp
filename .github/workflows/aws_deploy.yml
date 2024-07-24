@@ -36,13 +36,13 @@ jobs:
         zip -r app.zip ./publish
 
         # Upload ZIP file to S3
-        aws s3 cp app.zip s3://noeflix-backend--use1-az4--x-s3/app.zip
+        aws s3 cp app.zip s3://arn:aws:s3:::noeflixbackend/app.zip
 
         # Create a new application version in Elastic Beanstalk
         aws elasticbeanstalk create-application-version \
           --application-name noeflix_backend \
           --version-label $GITHUB_SHA \
-          --source-bundle S3Bucket="noeflix-backend--use1-az4--x-s3",S3Key="app.zip"
+          --source-bundle S3Bucket="arn:aws:s3:::noeflixbackend",S3Key="app.zip"
 
         # Update the Elastic Beanstalk environment to use the new version
         aws elasticbeanstalk update-environment \
