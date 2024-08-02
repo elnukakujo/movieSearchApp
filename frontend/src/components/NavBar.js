@@ -12,7 +12,6 @@ export default function NavBar(){
 
     const handleSearch = (term) => {
         const encodedTerm = encodeURIComponent(term);
-        console.log('Encoded Term:', encodedTerm);
         setSearchTerm(term);
         if (term.length > 0) {
             navigate(`/search/${encodedTerm}`);
