@@ -14,7 +14,7 @@ export default function EpisodeDetails() {
     const [episode, setEpisode]=useState({});
 
     const fetchEpisode = async () => {
-        const url = `http://127.0.0.1:5252/api/TmdbData/episodeDetails?id=${id}&season_number=${season_number}&episode_number=${episode_number}&Language=${language}`;
+        const url = `http://127.0.0.1:8080/api/TmdbData/episodeDetails?id=${id}&season_number=${season_number}&episode_number=${episode_number}&Language=${language}`;
         try {
             const response = await fetch(url);
             if (!response.ok) {
@@ -85,13 +85,13 @@ export default function EpisodeDetails() {
                     ]}
                 />
                 <DragSeason
-                    url={"http://127.0.0.1:5252/api/TmdbData/seasonsDetails"}
+                    url={"http://127.0.0.1:8080/api/TmdbData/seasonsDetails"}
                     queryParams={`id=${id}&Language=${language}`}
                     season={season_number}
                     currentEpisode={episode_number}
                 />
                 <DragPosters
-                    url={'http://127.0.0.1:5252/api/TmdbData/recommendation'}
+                    url={'http://127.0.0.1:8080/api/TmdbData/recommendation'}
                     title="Recommendations"
                     queryParams={`MediaType=tv&id=${id}&Language=${language}`}
                 />

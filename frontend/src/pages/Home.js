@@ -5,18 +5,18 @@ export default function Home() {
         <div className='section' id="home">
             <div className='content'>
                 <DragPosters
-                url="http://127.0.0.1:5252/api/TmdbData/upcoming"
+                url="http://127.0.0.1:8080/api/TmdbData/upcoming"
                 title="Upcoming Movies"
                 queryParams='Language=en&region=US'
                 />
                 <DragPosters
-                url="http://127.0.0.1:5252/api/TmdbData/trending"
+                url="http://127.0.0.1:8080/api/TmdbData/trending"
                 title="Trending Now"
                 queryParams='Language=en'
                 toggleButton={['Day', 'Week']}
                 />
                 <DragPosters
-                url="http://127.0.0.1:5252/api/TmdbData/top_rated"
+                url="http://127.0.0.1:8080/api/TmdbData/top_rated"
                 title="Top Rated"
                 queryParams='Language=en'
                 toggleButton={['Movie', 'TV']}

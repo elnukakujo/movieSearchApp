@@ -18,7 +18,7 @@ export default function Details() {
     const fetchMovies = async () => {
       try {
         let fullUrl = new URL(
-          `http://127.0.0.1:5252/api/TmdbData/findById?MediaType=${media_type}&id=${id}&Language=${language}`
+          `http://127.0.0.1:8080/api/TmdbData/findById?MediaType=${media_type}&id=${id}&Language=${language}`
         );
         const response = await fetch(fullUrl);
         if (!response.ok) {
@@ -101,7 +101,7 @@ export default function Details() {
         )}
         {media_type === 'tv' && element.seasons && element.seasons.length > 0 && (
           <DragSeason
-            url={"http://127.0.0.1:5252/api/TmdbData/seasonsDetails"}
+            url={"http://127.0.0.1:8080/api/TmdbData/seasonsDetails"}
             queryParams={`id=${id}&Language=${language}`}
             toggleButton={element.seasons.map(season => season.season_number.toString())} // Assuming `element.seasons` is an array of objects with `season_number`
           />
@@ -115,7 +115,7 @@ export default function Details() {
           language={language}
         />
         <DragPosters
-            url={'http://127.0.0.1:5252/api/TmdbData/recommendation'}
+            url={'http://127.0.0.1:8080/api/TmdbData/recommendation'}
             title="Recommendations"
             queryParams={`MediaType=${media_type}&id=${id}&Language=${language}`}
         />

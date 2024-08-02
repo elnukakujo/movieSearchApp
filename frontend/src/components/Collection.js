@@ -10,7 +10,7 @@ export default function Collection({ id, collectionId, language }){
     const [isClick, setIsClick] = useState(false);
     const collectionRef=useRef(null);
     const fetchCollection = async () => {
-        let fullUrl = new URL("http://127.0.0.1:5252/api/TmdbData/collection");
+        let fullUrl = new URL("http://127.0.0.1:8080/api/TmdbData/collection");
         fullUrl+=`?id=${collectionId}&Language=${language}`;
         const response = await fetch(fullUrl);
         if (!response.ok) {

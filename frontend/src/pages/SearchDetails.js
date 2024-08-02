@@ -8,7 +8,7 @@ export default function SearchResults(){
   const [results, setResults] = useState([])
 
   const fetchElements = async () => {
-    let url = `http://127.0.0.1:5252/api/TmdbData/search?Query=${encodeURIComponent(term)}&Language=en`;
+    let url = `http://127.0.0.1:8080/api/TmdbData/search?Query=${encodeURIComponent(term)}&Language=en`;
     const response = await fetch(url);
     if (!response.ok) {
       throw new Error('Network response was not ok');

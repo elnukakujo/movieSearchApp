@@ -4,7 +4,7 @@ export default function Reviews({ mediatype, id, language }) {
     const [reviews, setReviews] = useState([]);
     const fetchReviews= async () => {
         try {
-            let url = new URL(`http://127.0.0.1:5252/api/TmdbData/reviews?MediaType=${mediatype}&id=${id}&Language=${language}`);
+            let url = new URL(`http://127.0.0.1:8080/api/TmdbData/reviews?MediaType=${mediatype}&id=${id}&Language=${language}`);
             const response = await fetch(url);
             if (!response.ok) {
                 throw new Error('Network response was not ok');

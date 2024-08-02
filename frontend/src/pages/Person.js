@@ -7,7 +7,7 @@ export default function Person() {
     const {id} = useParams();
     const [person, setPerson] = useState({});
     const fetchInfos = async () => {
-        let url = new URL(`http://127.0.0.1:5252/api/TmdbData/person?id=${id}&Language=en`);
+        let url = new URL(`http://127.0.0.1:8080/api/TmdbData/person?id=${id}&Language=en`);
         const response = await fetch(url);
         if (!response.ok) {
             throw new Error('Network response was not ok');
